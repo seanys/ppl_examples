@@ -347,3 +347,13 @@ main { flex: 1 0 auto; }
 .task .rules .panel { flex: 1 1 0; display: flex; flex-direction: column; justify-content: center; }
 .task .rules .panel h3 { margin-bottom: auto; padding-bottom: 12px; }
 .task .rules .panel > :last-child { margin-bottom: auto; }
+.lander .craft { animation: lander-hover 3s ease-in-out infinite alternate; }
+.lander .flame { transform-origin: 160px 118px; animation: lander-flame 0.18s ease-in-out infinite alternate; }
+.lander .flame.side { transform-origin: 131px 95px; animation-duration: 0.23s; }
+@keyframes lander-hover { from { transform: translateY(6px); } to { transform: translateY(-10px); } }
+@keyframes lander-flame { from { transform: scale(1, 0.75); } to { transform: scale(1, 1.1); } }
+@media (prefers-reduced-motion: reduce) { .lander .craft, .lander .flame { animation: none; } }
+/* placeholder card on a category page whose examples are in preparation */
+.task.wip { padding: 72px 24px; text-align: center; border-style: dashed; border-color: #c4ccd5; background: var(--card); box-shadow: none; }
+.task.wip h2 { margin: 0 0 8px; font-size: 1.4rem; }
+.task.wip p { margin: 0; color: var(--muted); }
