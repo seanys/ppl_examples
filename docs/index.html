@@ -37,14 +37,14 @@
             <svg class="thumb acrobot" viewBox="0 0 320 200" role="img" aria-label="A two-link arm swinging from a joint"><g class="upper" style="transform-origin:160px 70px"><line x1="160" y1="70" x2="160" y2="120" stroke="#2f5d8a" stroke-width="7" stroke-linecap="round"/><g class="lower" style="transform-origin:160px 120px"><line x1="160" y1="120" x2="160" y2="170" stroke="#2f5d8a" stroke-width="7" stroke-linecap="round"/></g><circle cx="160" cy="120" r="4" fill="#fff" stroke="#2f5d8a" stroke-width="2"/></g><circle cx="160" cy="70" r="5" fill="#1f2328"/></svg>
             <div class="body">
               <h3>Underactuated control</h3>
-              <p>Underactuated systems are mechanical systems that cannot be fully driven by their controls, such as a two-link arm with a motor only at its elbow. The agent controls the torques of the driven joints to bring the whole system to its goal.</p>
+              <p>Underactuated systems are mechanical systems that cannot be fully driven by their controls, such as a two-link arm with a motor only at its elbow. The agent uses the coupling between driven and undriven parts to reach a target configuration or maintain balance.</p>
             </div>
           </a>
           <a class="example" href="thrust-vehicles.html">
             <svg class="thumb lander" viewBox="0 0 320 200" role="img" aria-label="A lander hovering on its engine"><line x1="70" y1="178" x2="250" y2="178" stroke="#c4ccd5" stroke-width="2"/><line x1="140" y1="178" x2="180" y2="178" stroke="#2f5d8a" stroke-width="3"/><g class="craft"><path class="flame" d="M152 118 Q160 150 168 118 Z" fill="#d1861f"/><path class="flame side" d="M131 92 Q118 95 131 98 Z" fill="#d1861f"/><path d="M140 104 L134 120 M180 104 L186 120 M130 120 L138 120 M182 120 L190 120" stroke="#4a5a6c" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M144 80 L176 80 L184 104 L136 104 Z" fill="#fff" stroke="#2f5d8a" stroke-width="3" stroke-linejoin="round"/><circle cx="160" cy="91" r="5" fill="#2f5d8a"/></g></svg>
             <div class="body">
               <h3>Thrust-driven vehicles</h3>
-              <p>Thrust-driven vehicles move only through the forces of their engines, such as a lander with a main engine and two side engines.</p>
+              <p>Thrust-driven vehicles move only through the forces of their engines, such as a lander with a main engine and two side engines. The agent coordinates the vehicle's translation and rotation to reach a target position or follow a desired trajectory.</p>
             </div>
           </a>
         </div>
@@ -60,7 +60,7 @@
       </section>
 
       <section class="section why" id="why">
-        <h2>Why teach the principle, not the reward</h2>
+        <h2>Why is learning from reward hard?</h2>
         <figure class="figure">
           <svg class="figure-svg" viewBox="0 0 1200 420" role="img" aria-label="Why a reward is hard to learn from in Lunar Lander with wind" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Helvetica Neue, Arial, sans-serif">
 <defs>
