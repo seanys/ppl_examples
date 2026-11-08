@@ -318,28 +318,9 @@ main { flex: 1 0 auto; }
 .burden .flow-arrow::after { border-left-color: var(--accent); }
 .burden .scalar { border-color: var(--accent); color: var(--accent); }
 .burden .qm { background: var(--accent); }
-/* larger reward decoding burden block */
-.burden.flow { padding: 26px 30px; }
+/* larger titles of the reward decoding burden and principles of behavior blocks */
 .burden h3 { font-size: 1.3rem; margin-bottom: 16px; }
-.burden .flow-row { grid-template-columns: 140px auto 72px auto; gap: 16px; padding: 14px 0; }
-.burden .flow-row.decode { grid-template-columns: 140px auto; }
-.burden .flow-label { font-size: 1.05rem; }
-.burden .causes { gap: 10px; }
-.burden .causes span { font-size: 1.05rem; padding: 6px 16px; }
-.burden .scalar { font-size: 1.08rem; padding: 7px 16px; }
-.burden .flow-arrow { height: 3px; }
-.burden .flow-arrow::after { top: -6px; border-left-width: 11px; border-top-width: 7.5px; border-bottom-width: 7.5px; }
-.burden .decode-text { font-size: 1.1rem; }
-.burden .qm { width: 28px; height: 28px; font-size: 1rem; }
-/* larger principles of behavior block */
-.principles.flow { padding: 26px 30px; }
 .principles h3 { font-size: 1.3rem; margin-bottom: 14px; }
-.principles-def { font-size: 1.1rem; line-height: 1.65; margin-bottom: 18px; }
-.norms { gap: 14px; }
-.norms li { padding: 16px 18px; }
-.norms b { font-size: 1.08rem; margin-bottom: 4px; }
-.norms span { font-size: 0.98rem; }
-.pr-more { font-size: 1rem; margin-top: 16px; }
 .example svg.thumb { display: block; width: 100%; aspect-ratio: 16 / 10; background: linear-gradient(180deg, #f6f8fb, #eef2f7); border-bottom: 1px solid var(--line); }
 .acrobot .upper { animation: acro-upper 3.2s ease-in-out infinite alternate; }
 .acrobot .lower { animation: acro-lower 3.2s ease-in-out infinite alternate; }
