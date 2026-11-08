@@ -94,9 +94,52 @@
       rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
     }
 
+    function drawCartpole() {
+      // the cart on its track (data.track: half length, m) and the pole; a positive angle leans the pole right
+      const w = canvas.clientWidth, h = w, ground = h * 0.66;
+      const i = Math.min(Math.round(t), ep.angle.length - 1);
+      const [pa, pb, f] = sample(ep.position);
+      const x = pa + (pb - pa) * f, th = angleAt(ep.angle);
+      const u = ep.torque[Math.min(i, ep.torque.length - 1)];
+      const scale = (w * 0.42) / data.track, cx = w / 2 + x * scale;
+      const cw = w * 0.16, ch = w * 0.08, pole = w * 0.36;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = css("--line");
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(w / 2 - data.track * scale, ground); ctx.lineTo(w / 2 + data.track * scale, ground); ctx.stroke();
+      [-1, 1].forEach((sd) => {
+        ctx.beginPath(); ctx.moveTo(w / 2 + sd * data.track * scale, ground - 8); ctx.lineTo(w / 2 + sd * data.track * scale, ground + 8); ctx.stroke();
+      });
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(cx, ground - ch); ctx.lineTo(cx, ground - ch - pole - 12); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#fff";
+      ctx.strokeStyle = css("--text");
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.rect(cx - cw / 2, ground - ch, cw, ch); ctx.fill(); ctx.stroke();
+      // push: an arrow beside the cart
+      ctx.strokeStyle = ctx.fillStyle = css("--torque");
+      ctx.lineWidth = 3;
+      const ax = cx - u * (cw / 2 + 6), bx = ax - u * w * 0.07, ay = ground - ch / 2;
+      ctx.beginPath(); ctx.moveTo(bx, ay); ctx.lineTo(ax, ay); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ax + u * 2, ay); ctx.lineTo(ax - u * 7, ay - 5); ctx.lineTo(ax - u * 7, ay + 5); ctx.fill();
+      const px = cx + pole * Math.sin(th), py = ground - ch - pole * Math.cos(th);
+      ctx.strokeStyle = css("--rod");
+      ctx.lineWidth = w * 0.025;
+      ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(cx, ground - ch); ctx.lineTo(px, py); ctx.stroke();
+      ctx.fillStyle = css("--text");
+      ctx.beginPath(); ctx.arc(cx, ground - ch, w * 0.014, 0, 2 * Math.PI); ctx.fill();
+      clock.textContent = (t * data.dt).toFixed(2) + " s";
+      slider.value = t;
+      const active = ep.rule[i];
+      rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
+    }
+
     function draw() {
       if (!ep) return;
       if (data.kind === "acrobot") return drawAcrobot();
+      if (data.kind === "cartpole") return drawCartpole();
       const w = canvas.clientWidth, cx = w / 2, cy = w / 2, R = w * 0.34;
       const th = angleAt();
       const i = Math.min(Math.round(t), ep.angle.length - 1);

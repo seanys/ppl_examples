@@ -69,10 +69,10 @@
 
             <section class="panel">
             <h3>Sample efficiency</h3>
-            <p class="speed">Within 40,000 environment steps</p>
+            <p class="speed">Within 36,000 environment steps</p>
             <dl class="defs train-stats">
               <dt>Success criterion</dt><dd>all 20 evaluation episodes stay within 0.1 rad of upright for their last 2.5 s</dd>
-              <dt>Converges in</dt><dd>20 updates</dd>
+              <dt>Converges in</dt><dd>18 updates</dd>
             </dl>
             </section>
           </div>
@@ -136,10 +136,10 @@
 
             <section class="panel">
             <h3>Sample efficiency</h3>
-            <p class="speed">Within 10,000 environment steps</p>
+            <p class="speed">Within 2,000 environment steps</p>
             <dl class="defs train-stats">
               <dt>Success criterion</dt><dd>all 20 evaluation episodes lift the tip above the line within 500 steps</dd>
-              <dt>Converges in</dt><dd>5 updates</dd>
+              <dt>Converges in</dt><dd>1 update</dd>
             </dl>
             </section>
           </div>
@@ -160,6 +160,74 @@
           </div>
         </div>
       </article>
+
+      <article class="task" id="cartpole-balance">
+        <div class="task-head">
+          <h2>Keep the pole upright</h2>
+          <span class="tag">CartPole-v1</span>
+        </div>
+        <div class="split">
+          <div class="player" data-player data-run="cartpole_balance" data-rules="#cartpole-rules">
+            <canvas aria-label="Animation of the learned cart-pole policy"></canvas>
+            <p class="player-error" hidden>The trajectory data could not be loaded.</p>
+            <div class="controls">
+              <button type="button" data-play>Play</button>
+              <input type="range" min="0" max="100" step="0.01" value="0" data-slider aria-label="Time">
+              <span class="clock" data-clock>0.00 s</span>
+              <select data-speed aria-label="Playback speed">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
+            </div>
+            <div class="episodes" data-episodes aria-label="Episode"></div>
+          </div>
+
+          <div class="rules" id="cartpole-rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantity</dt><dd>pole angular velocity \(\omega\)</dd>
+              <dt>Return speed</dt><dd>\(\omega^*(\theta)=\sqrt{2a\,|\theta|}\), with \(a\) a quarter of the angular acceleration the push gives the pole, taken at the next-step angle \(\theta'\)</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr data-rule="0"><td>Stay upright</td><td>always</td><td>\(\omega^*(\theta')\) toward upright</td></tr>
+              </tbody>
+            </table>
+            <p class="note">The pole turns back fast when far from upright and slows down as it arrives.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 2,000 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 20 evaluation episodes keep the pole up and the cart on the track for 500 steps</dd>
+              <dt>Converges in</dt><dd>1 update</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/underactuated/cartpole_balance.py" data-download="cartpole_balance.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>cartpole_balance.py</a>
+            <a class="btn" href="examples/underactuated/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python cartpole_balance.py</code></pre>
+          </div>
+        </div>
+      </article>
     </div>
   </main>
 
@@ -168,6 +236,7 @@
 
   <script src="data/underactuated/pendulum_swing_up.js"></script>
   <script src="data/underactuated/acrobot_swing_up.js"></script>
+  <script src="data/underactuated/cartpole_balance.js"></script>
   <script src="assets/pendulum_player.js"></script>
   <script src="assets/site.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>

@@ -161,7 +161,7 @@ def load(run):
 # Training
 # ---------------------------------------------------------------------------
 def train(out, seed=0, n_env=20, horizon=100, iters=50, lr=3e-4, epochs=10, clip=0.2, minibatch=64,
-          grad_clip=0.5, eval_every=5):
+          grad_clip=0.5, eval_every=1):
     rng = np.random.default_rng(seed)
     torch.manual_seed(seed)
     envs = [make_env() for _ in range(n_env)]
