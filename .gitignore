@@ -1,0 +1,17 @@
+# Local planning notes, never uploaded
+local/
+
+# Local tests of web pages and page scripts, never uploaded
+dev/
+
+# Outputs written when an example is run
+runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# macOS
+.DS_Store

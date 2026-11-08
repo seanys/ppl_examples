@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PPL Examples</title>
+  <meta name="description" content="Scenarios learned with prescriptive policy learning (PPL), with the principles each agent is taught and its training code.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Teaching Agents the &ldquo;Principle&rdquo;, Not the &ldquo;Reward&rdquo;: Prescriptive Policy Learning</h1>
+      <p class="author">Shan Yang, National University of Singapore</p>
+      <p class="intro">Prescriptive policy learning (PPL) directly teaches agents higher-level knowledge about the tasks, termed principles of behavior, such as how to maintain balance, how to accumulate energy, and how to land smoothly. Through appropriately selected key quantities and references, PPL indicates at every step whether the agent follows the principles and to what extent, so agents learn good, generalizable policies without any reward. Each scenario below shows what the agent learns and the principles it is taught, together with the training code.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <h2>Scenarios</h2>
+      <div class="systems">
+        <section class="system">
+          <h3>Pendulums and linkages</h3>
+          <p>Joint torques rotate a chain of links toward a posture or bring its tip to a target.</p>
+          <ul>
+            <li>Swinging up by accumulating energy</li>
+            <li>Reaching a target</li>
+            <li>Balancing upright</li>
+          </ul>
+        </section>
+        <section class="system">
+          <h3>Thrust vehicles</h3>
+          <p>Thrust changes the velocity and attitude of the whole vehicle.</p>
+          <ul>
+            <li>Holding balance in wind</li>
+            <li>Decelerating to land</li>
+            <li>Landing with balance and deceleration together</li>
+          </ul>
+        </section>
+        <section class="system">
+          <h3>Ground vehicles</h3>
+          <p>A driving force moves the vehicle along terrain shaped by gravity.</p>
+          <ul>
+            <li>Climbing a hill by accumulating energy</li>
+            <li>Arriving at the top with low speed</li>
+          </ul>
+        </section>
+        <section class="system">
+          <h3>Legged jumping and locomotion</h3>
+          <p>Joint torques propel the body through contact with the ground.</p>
+          <ul>
+            <li>Taking off, jumping high and jumping far</li>
+            <li>Hopping forward and landing still</li>
+            <li>Continuous hopping</li>
+          </ul>
+        </section>
+        <section class="system">
+          <h3>Object manipulation</h3>
+          <p>The agent moves another object through contact.</p>
+          <ul>
+            <li>Pushing an object to a target</li>
+            <li>Picking and placing</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">Scenario pages and training code are being added.</div>
+  </footer>
+</body>
+</html>
