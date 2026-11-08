@@ -15,7 +15,7 @@ Each action is credited by how much its own transition brings the angular veloci
 and the policy is updated with this coefficient in place of the return.
 
 Usage:
-    python pendulum_swing_up.py                 train (1e5 steps, about ten seconds on a laptop CPU)
+    python pendulum_swing_up.py                 train until every evaluation episode succeeds (at most 1e5 steps)
     python pendulum_swing_up.py --resume DIR    continue an interrupted run
     python pendulum_swing_up.py --gif DIR       write a GIF of the trained policy
     python pendulum_swing_up.py --export DIR F  write episodes of the trained policy to JSON (data of the web player)
@@ -176,6 +176,9 @@ def train(out, seed=0, n_env=20, horizon=100, iters=50, lr=3e-4, epochs=10, clip
             append_row(out / "eval.csv", dict(update=it, steps=it * n_env * horizon, **ev))
             print(f"steps {it * n_env * horizon:6d}  success {ev['success']:.2f}  reached top {ev['reached']:.2f}  "
                   f"final deviation {ev['final_dev']:.3f} rad  ({time.time() - t0:.0f} s)", flush=True)
+            if ev["success"] == 1.0:
+                print("every evaluation episode succeeds: training stops", flush=True)
+                break
         if it == iters:
             break
         S, A, S2 = [], [], []

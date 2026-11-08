@@ -49,7 +49,8 @@
           </div>
 
           <div class="rules" id="pendulum-rules">
-            <p class="desc">The pendulum swings up from any angle and stays upright. PPL learns this in 40,000 steps.</p>
+            <section class="panel">
+            <h3>Principles</h3>
             <dl class="defs">
               <dt>Key quantity</dt><dd>angular velocity \(\omega\)</dd>
               <dt>Threshold speed</dt><dd>\(\omega^*(\theta)=\sqrt{\tfrac{3g}{l}\,(1-\cos\theta)}\), the speed that just coasts to the top, taken at the next-step angle \(\theta'\)</dd>
@@ -64,21 +65,98 @@
               </tbody>
             </table>
             <p class="note">At 0.41 rad the largest torque just holds the pendulum against gravity.</p>
+            </section>
 
-            <div class="run">
-              <h3>Train it yourself</h3>
-              <div class="downloads">
-                <a class="btn primary" href="examples/underactuated/pendulum_swing_up.py" data-download="pendulum_swing_up.py">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>pendulum_swing_up.py</a>
-                <a class="btn" href="examples/underactuated/requirements.txt" data-download="requirements.txt">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
-              </div>
-              <div class="terminal">
-                <button type="button" class="copy" data-copy>Copy</button>
-                <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 40,000 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 20 evaluation episodes stay within 0.1 rad of upright for their last 2.5 s</dd>
+              <dt>Converges in</dt><dd>20 updates</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/underactuated/pendulum_swing_up.py" data-download="pendulum_swing_up.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>pendulum_swing_up.py</a>
+            <a class="btn" href="examples/underactuated/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> python pendulum_swing_up.py</code></pre>
-              </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="task" id="acrobot-swing-up">
+        <div class="task-head">
+          <h2>Swing the tip above the line</h2>
+          <span class="tag">Acrobot-v1</span>
+        </div>
+        <div class="split">
+          <div class="player" data-player data-run="acrobot_swing_up" data-rules="#acrobot-rules">
+            <canvas aria-label="Animation of the learned acrobot policy"></canvas>
+            <p class="player-error" hidden>The trajectory data could not be loaded.</p>
+            <div class="controls">
+              <button type="button" data-play>Play</button>
+              <input type="range" min="0" max="100" step="0.01" value="0" data-slider aria-label="Time">
+              <span class="clock" data-clock>0.00 s</span>
+              <select data-speed aria-label="Playback speed">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
             </div>
+            <div class="episodes" data-episodes aria-label="Episode"></div>
+          </div>
+
+          <div class="rules" id="acrobot-rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantity</dt><dd>elbow angular velocity \(\omega_2\), the rotation of the lower link relative to the upper link</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr data-rule="0"><td>Accumulate energy</td><td>always</td><td>\(4\pi\) rad/s along the elbow rotation</td></tr>
+              </tbody>
+            </table>
+            <p class="note">Pushing along the elbow rotation makes the motor add energy at every step.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 10,000 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 20 evaluation episodes lift the tip above the line within 500 steps</dd>
+              <dt>Converges in</dt><dd>5 updates</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/underactuated/acrobot_swing_up.py" data-download="acrobot_swing_up.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>acrobot_swing_up.py</a>
+            <a class="btn" href="examples/underactuated/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python acrobot_swing_up.py</code></pre>
           </div>
         </div>
       </article>
@@ -89,6 +167,7 @@
   <script src="assets/layout.js" data-part="footer"></script>
 
   <script src="data/underactuated/pendulum_swing_up.js"></script>
+  <script src="data/underactuated/acrobot_swing_up.js"></script>
   <script src="assets/pendulum_player.js"></script>
   <script src="assets/site.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>

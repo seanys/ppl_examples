@@ -8,7 +8,7 @@
   --rod: #2f5d8a;
   --torque: #d1861f;
   --active: #fdecc4;
-  --max: 1040px;
+  --max: 1200px;
 }
 
 * { box-sizing: border-box; }
@@ -327,3 +327,23 @@ main { flex: 1 0 auto; }
 @keyframes acro-upper { from { transform: rotate(-50deg); } to { transform: rotate(50deg); } }
 @keyframes acro-lower { from { transform: rotate(-40deg); } to { transform: rotate(40deg); } }
 @media (prefers-reduced-motion: reduce) { .acrobot .upper, .acrobot .lower { animation: none; transform: rotate(30deg); } }
+/* training facts in the right column; training code across the bottom of the card */
+.rules .train-stats { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+.task .run-full { margin: 0; padding: 18px 22px 22px; border-top: 1px solid var(--line); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 24px; align-items: center; }
+.task .run-full h3 { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 760px) { .task .run-full { grid-template-columns: 1fr; } }
+/* right column as two cards matching the player card */
+.task .split { align-items: stretch; }
+.task .rules { display: flex; flex-direction: column; gap: 16px; }
+.task .rules .panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+.task .rules .panel:last-child { flex: 1; }
+.task .rules .panel h3 { margin: 0 0 12px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.task .rules .panel table { background: var(--bg); border-radius: 6px; }
+.task .rules .note { margin-bottom: 0; }
+.task .rules .defs:last-child { margin-bottom: 0; }
+.task .rules .train-stats { margin-top: 0; padding-top: 0; border-top: none; }
+.task .rules .speed { margin: 0 0 12px; font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
+/* the two right-hand cards share the height of the player equally */
+.task .rules .panel { flex: 1 1 0; display: flex; flex-direction: column; justify-content: center; }
+.task .rules .panel h3 { margin-bottom: auto; padding-bottom: 12px; }
+.task .rules .panel > :last-child { margin-bottom: auto; }

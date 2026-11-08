@@ -1,4 +1,5 @@
-// Player for pendulum episodes: draws the pendulum from recorded angles and torques, with play, pause, a time slider,
+// Player for pendulum and acrobot episodes (data.kind "acrobot": two links, the elbow driven): draws the system from
+// recorded angles and torques, with play, pause, a time slider,
 // speed and episode choice. The active principle is marked in the principle table (rows with data-rule="0" or "1").
 (function () {
   function css(name) {
@@ -34,15 +35,68 @@
       return [arr[i], arr[j], t - i];
     }
 
-    function angleAt() {
-      let [a, b, f] = sample(ep.angle);
+    function angleAt(arr) {
+      let [a, b, f] = sample(arr || ep.angle);
       if (b - a > Math.PI) b -= 2 * Math.PI;
       if (a - b > Math.PI) b += 2 * Math.PI;
       return a + (b - a) * f;
     }
 
+    function arrow(cx, cy, r, u, color) {
+      // torque: an arc around (cx, cy), counterclockwise for a positive torque
+      const span = (Math.abs(u) / data.max_torque) * 1.6;
+      if (span <= 0.02) return;
+      const start = -Math.PI / 2, ccw = u > 0;
+      const end = ccw ? start - span : start + span;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(cx, cy, r, start, end, ccw); ctx.stroke();
+      const ex = cx + r * Math.cos(end), ey = cy + r * Math.sin(end);
+      const dir = end + (ccw ? -Math.PI / 2 : Math.PI / 2);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(ex + 7 * Math.cos(dir), ey + 7 * Math.sin(dir));
+      ctx.lineTo(ex + 5 * Math.cos(dir + 2.3), ey + 5 * Math.sin(dir + 2.3));
+      ctx.lineTo(ex + 5 * Math.cos(dir - 2.3), ey + 5 * Math.sin(dir - 2.3));
+      ctx.fill();
+    }
+
+    function drawAcrobot() {
+      // angles as in Acrobot-v1: the upper link from hanging down, the elbow relative to the upper link
+      const w = canvas.clientWidth, cx = w / 2, cy = w / 2, R = w * 0.21;
+      const a1 = angleAt(ep.angle), a2 = angleAt(ep.angle2);
+      const i = Math.min(Math.round(t), ep.angle.length - 1);
+      const u = ep.torque[Math.min(i, ep.torque.length - 1)];
+      ctx.clearRect(0, 0, w, w);
+      // the line the tip has to clear, one link length above the free joint
+      ctx.strokeStyle = css("--line");
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.moveTo(w * 0.08, cy - R); ctx.lineTo(w * 0.92, cy - R); ctx.stroke();
+      ctx.setLineDash([]);
+      const ex = cx + R * Math.sin(a1), ey = cy + R * Math.cos(a1);
+      const tx = ex + R * Math.sin(a1 + a2), ty = ey + R * Math.cos(a1 + a2);
+      ctx.strokeStyle = css("--rod");
+      ctx.lineWidth = w * 0.03;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ex, ey); ctx.lineTo(tx, ty); ctx.stroke();
+      arrow(ex, ey, w * 0.06, u, css("--torque"));
+      ctx.fillStyle = "#fff";
+      ctx.strokeStyle = css("--rod");
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(ex, ey, w * 0.014, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = css("--text");
+      ctx.beginPath(); ctx.arc(cx, cy, w * 0.02, 0, 2 * Math.PI); ctx.fill();
+      clock.textContent = (t * data.dt).toFixed(2) + " s";
+      slider.value = t;
+      const active = ep.rule[i];
+      rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
+    }
+
     function draw() {
       if (!ep) return;
+      if (data.kind === "acrobot") return drawAcrobot();
       const w = canvas.clientWidth, cx = w / 2, cy = w / 2, R = w * 0.34;
       const th = angleAt();
       const i = Math.min(Math.round(t), ep.angle.length - 1);
