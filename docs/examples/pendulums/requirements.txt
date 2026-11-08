@@ -1,0 +1,4 @@
+gymnasium[classic-control]>=1.0
+numpy>=1.24
+torch>=2.0
+imageio>=2.30

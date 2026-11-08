@@ -3,72 +3,355 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PPL Examples</title>
-  <meta name="description" content="Scenarios learned with prescriptive policy learning (PPL), with the principles each agent is taught and its training code.">
+  <title>Prescriptive Policy Learning</title>
+  <meta name="description" content="Examples of prescriptive policy learning (PPL): principles of behavior handed directly to agents, with the learned behavior, the principles, and the training code.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
   <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
-  <header>
-    <div class="wrap">
-      <h1>Teaching Agents the &ldquo;Principle&rdquo;, Not the &ldquo;Reward&rdquo;: Prescriptive Policy Learning</h1>
-      <p class="author">Shan Yang, National University of Singapore</p>
-      <p class="intro">Prescriptive policy learning (PPL) directly teaches agents higher-level knowledge about the tasks, termed principles of behavior, such as how to maintain balance, how to accumulate energy, and how to land smoothly. Through appropriately selected key quantities and references, PPL indicates at every step whether the agent follows the principles and to what extent, so agents learn good, generalizable policies without any reward. Each scenario below shows what the agent learns and the principles it is taught, together with the training code.</p>
+<body id="top">
+  <div data-site-header></div>
+  <script src="assets/layout.js"></script>
+
+  <section class="hero">
+    
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Prescriptive Policy Learning<br><span class="for">for</span> <span class="rotate" data-rotate="pendulums|landers|vehicles|hoppers|robot arms">pendulums</span></h1>
+        <p class="lead">PPL teaches agents principles of behavior, such as how to maintain balance, how to accumulate energy, and how to land smoothly. Compared with rewards, PPL enables agents to learn good, generalizable policies directly from principles of behavior.</p>
+        <p class="paper"><a class="paper-link" href="https://arxiv.org/abs/2611.07130?ref=welcome.ai" target="_blank" rel="noopener"><i>Teaching Agents the &ldquo;Principle&rdquo;, Not the &ldquo;Reward&rdquo;: Prescriptive Policy Learning</i> <span aria-hidden="true">↗</span></a><br>Shan Yang, National University of Singapore</p>
+      </div>
+      <svg class="hero-tiles" viewBox="718 118 464 254" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(720 120)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><circle cx="50" cy="50" r="34" stroke-dasharray="3 4"/><line x1="50" y1="50" x2="72" y2="22"/><circle cx="50" cy="50" r="3" class="f"/><circle cx="72" cy="22" r="5"/></g><g transform="translate(840 120)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><path d="M38 36 h24 l6 14 h-36 z"/><line x1="36" y1="50" x2="28" y2="64"/><line x1="64" y1="50" x2="72" y2="64"/><path d="M45 52 l5 12 l5 -12"/><line x1="16" y1="80" x2="84" y2="80"/></g><g transform="translate(960 120)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><line x1="50" y1="12" x2="54" y2="36"/><line x1="54" y1="36" x2="44" y2="58"/><line x1="44" y1="58" x2="52" y2="80"/><line x1="40" y1="82" x2="64" y2="82"/><circle cx="54" cy="36" r="2.5" class="f"/><circle cx="44" cy="58" r="2.5" class="f"/></g><g transform="translate(1080 120)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><line x1="8" y1="78" x2="92" y2="78"/><rect x="34" y="62" width="32" height="14" rx="2"/><line x1="50" y1="62" x2="60" y2="18"/><circle cx="60" cy="18" r="4"/></g><g transform="translate(720 270)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><path d="M6 76 C 24 40, 40 40, 50 62 S 76 92, 94 34"/><rect x="38" y="46" width="16" height="9" rx="2" transform="rotate(40 46 50)"/><line x1="92" y1="34" x2="92" y2="18"/><path d="M92 18 l9 4 l-9 4"/></g><g transform="translate(840 270)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><circle cx="50" cy="50" r="36" stroke-dasharray="2 4"/><line x1="50" y1="50" x2="74" y2="34"/><line x1="74" y1="34" x2="70" y2="62"/><circle cx="50" cy="50" r="3" class="f"/><circle cx="74" cy="34" r="2.5"/><circle cx="74" cy="66" r="4" stroke-dasharray="2 2"/></g><g transform="translate(960 270)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><line x1="50" y1="16" x2="34" y2="48"/><line x1="34" y1="48" x2="56" y2="78"/><circle cx="50" cy="16" r="3" class="f"/><circle cx="34" cy="48" r="3"/><circle cx="56" cy="78" r="4"/></g><g transform="translate(1080 270)"><rect x="0" y="0" width="100" height="100" rx="14" class="tile"/><line x1="18" y1="84" x2="46" y2="84"/><line x1="32" y1="84" x2="32" y2="56"/><line x1="32" y1="56" x2="58" y2="38"/><line x1="58" y1="38" x2="76" y2="56"/><rect x="70" y="58" width="14" height="12"/><circle cx="32" cy="56" r="2.5" class="f"/><circle cx="58" cy="38" r="2.5" class="f"/></g></g></svg>
     </div>
-  </header>
+  </section>
 
   <main>
     <div class="wrap">
-      <h2>Scenarios</h2>
-      <div class="systems">
-        <section class="system">
-          <h3>Pendulums and linkages</h3>
-          <p>Joint torques rotate a chain of links toward a posture or bring its tip to a target.</p>
-          <ul>
-            <li>Swinging up by accumulating energy</li>
-            <li>Reaching a target</li>
-            <li>Balancing upright</li>
+      <section class="section" id="examples">
+        <h2>Examples</h2>
+        <p class="sub">Each example shows the behavior the agent learns, the principles it is taught, and the code to train it.</p>
+        <div class="examples">
+          <a class="example" href="pendulums.html#pendulum-swing-up">
+            <canvas data-thumb="pendulum_swing_up" data-kind="pendulum" aria-label="The learned pendulum swinging up to upright"></canvas>
+            <div class="body">
+              <h3>Swing up and stay upright</h3>
+              <p>The motor is too weak to lift the pendulum directly. Starting from any angle, the agent has to swing it up to the top and hold it there.</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="coming">
+          <h3>More examples in progress</h3>
+          <p>We are adding further tasks from Gymnasium and beyond.</p>
+          <div class="chips">
+            <span>Lunar Lander</span><span>Mountain Car</span><span>Acrobot</span><span>Cart-pole</span><span>Reacher</span>
+            <span>Hopper</span><span>Walker2d</span><span>Pusher</span><span>Humanoid Standup</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section why" id="why">
+        <h2>Why teach the principle, not the reward</h2>
+        <figure class="figure">
+          <svg class="figure-svg" viewBox="0 0 1200 420" role="img" aria-label="Why a reward is hard to learn from in Lunar Lander with wind" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Helvetica Neue, Arial, sans-serif">
+<defs>
+<g id="lander" fill="#fff" stroke="#4a5a6c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+  <line x1="-11" y1="7" x2="-21" y2="20"/><line x1="11" y1="7" x2="21" y2="20"/>
+  <line x1="-25" y1="20" x2="-17" y2="20"/><line x1="17" y1="20" x2="25" y2="20"/>
+  <path d="M-3 9 h6 l1.5 4 h-9 z"/>
+  <rect x="-15" y="-3" width="30" height="12" rx="2"/>
+  <line x1="-7" y1="-3" x2="-7" y2="9"/><line x1="0" y1="-3" x2="0" y2="9"/><line x1="7" y1="-3" x2="7" y2="9"/>
+  <path d="M-9 -3 L-6 -14 H6 L9 -3 Z"/>
+  <line x1="5" y1="-14" x2="9" y2="-21"/>
+</g>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4a5a6c"/></marker>
+<marker id="ah-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2f5d8a"/></marker>
+</defs>
+<rect x="0" y="1" width="360" height="418" rx="16" fill="#fff" stroke="#dbe2ea" stroke-width="1.5"/>
+<text x="180.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Task with wind</text>
+<g transform="translate(28 110) scale(1.3)" fill="none" stroke="#9aa7b5" stroke-width="2.4" stroke-linecap="round"><path d="M0 0 H38 a9 9 0 1 0 -9 -9"/><path d="M0 12 H52 a8 8 0 1 1 -8 8"/><path d="M0 24 H30"/></g>
+<text x="40" y="175" font-size="14" fill="#59636e" text-anchor="start" font-weight="400" font-style="italic">wind</text>
+<g transform="translate(185 150) rotate(0) scale(2.2)"><path d="M-3 12 L0 24 L3 12 Z" fill="#2f5d8a" stroke="none"/><use href="#lander"/></g>
+<path d="M185 210 V318" stroke="#4a5a6c" stroke-width="1.8" stroke-dasharray="5 5" fill="none" marker-end="url(#ah)"/>
+<path d="M195 205 C 215 260, 250 290, 292 312" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#ah-o)"/>
+<polyline points="20,345 70,328 105,350 135,350 235,350 255,330 300,350 340,336" fill="none" stroke="#1f2328" stroke-width="2"/>
+<line x1="135" y1="350" x2="135" y2="318" stroke="#1f2328" stroke-width="1.6"/><path d="M135 318 l14 6 l-14 6 z" fill="#6b7785"/>
+<line x1="235" y1="350" x2="235" y2="318" stroke="#1f2328" stroke-width="1.6"/><path d="M235 318 l14 6 l-14 6 z" fill="#6b7785"/>
+<text x="185" y="385" font-size="13" fill="#59636e" text-anchor="middle" font-weight="400">land softly on the pad</text>
+<rect x="400" y="1" width="380" height="418" rx="16" fill="#fff" stroke="#dbe2ea" stroke-width="1.5"/>
+<text x="590.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Reward per step</text>
+<rect x="414" y="62" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(454 96) rotate(0) scale(0.8)"><use href="#lander"/></g>
+<path d="M468 108 l8 10" stroke="#6b7785" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="448" y1="126" x2="484" y2="126" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="496" y="74" width="76" height="24" rx="12" fill="#eef1f4" stroke="#6b7785" stroke-opacity="0.5"/>
+<text x="534" y="91" font-size="13" fill="#6b7785" text-anchor="middle" font-weight="700">+</text>
+<text x="534" y="126" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">closer</text>
+<rect x="594" y="62" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(634 98) rotate(0) scale(0.8)"><use href="#lander"/></g>
+<path d="M608 84 l6 10 l6 -10 z" fill="#6b7785"/>
+<rect x="676" y="74" width="76" height="24" rx="12" fill="#eef1f4" stroke="#6b7785" stroke-opacity="0.5"/>
+<text x="714" y="91" font-size="13" fill="#6b7785" text-anchor="middle" font-weight="700">+</text>
+<text x="714" y="126" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">slower</text>
+<rect x="414" y="148" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(454 186) rotate(-18) scale(0.8)"><use href="#lander"/></g>
+<path d="M472 168 q10 8 4 20" fill="none" stroke="#6b7785" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="496" y="160" width="76" height="24" rx="12" fill="#eef1f4" stroke="#6b7785" stroke-opacity="0.5"/>
+<text x="534" y="177" font-size="13" fill="#6b7785" text-anchor="middle" font-weight="700">+</text>
+<text x="534" y="212" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">upright</text>
+<rect x="594" y="148" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(634 188) rotate(0) scale(0.8)"><use href="#lander"/></g>
+<line x1="608" y1="205" x2="660" y2="205" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="676" y="160" width="76" height="24" rx="12" fill="#eef1f4" stroke="#6b7785" stroke-opacity="0.5"/>
+<text x="714" y="177" font-size="13" fill="#6b7785" text-anchor="middle" font-weight="700">+10</text>
+<text x="714" y="212" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">leg contact</text>
+<rect x="414" y="234" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(454 268) rotate(0) scale(0.8)"><path d="M-3 12 L0 24 L3 12 Z" fill="#2f5d8a" stroke="none"/><use href="#lander"/></g>
+<rect x="496" y="246" width="76" height="24" rx="12" fill="#eaf0f6" stroke="#24496d" stroke-opacity="0.5"/>
+<text x="534" y="263" font-size="13" fill="#24496d" text-anchor="middle" font-weight="700">−0.3</text>
+<text x="534" y="298" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">main engine</text>
+<rect x="594" y="234" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(634 272) rotate(0) scale(0.8)"><path d="M16 -1 L26 1 L16 3 Z" fill="#2f5d8a" stroke="none"/><use href="#lander"/></g>
+<rect x="676" y="246" width="76" height="24" rx="12" fill="#eaf0f6" stroke="#24496d" stroke-opacity="0.5"/>
+<text x="714" y="263" font-size="13" fill="#24496d" text-anchor="middle" font-weight="700">−0.03</text>
+<text x="714" y="298" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">side engine</text>
+<rect x="414" y="320" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(454 360) rotate(0) scale(0.8)"><use href="#lander"/></g>
+<line x1="426" y1="377" x2="482" y2="377" stroke="#1f2328" stroke-width="1.6"/>
+<line x1="426" y1="377" x2="426" y2="358" stroke="#1f2328" stroke-width="1.4"/><line x1="482" y1="377" x2="482" y2="358" stroke="#1f2328" stroke-width="1.4"/>
+<rect x="496" y="332" width="76" height="24" rx="12" fill="#eef1f4" stroke="#6b7785" stroke-opacity="0.5"/>
+<text x="534" y="349" font-size="13" fill="#6b7785" text-anchor="middle" font-weight="700">+100</text>
+<text x="534" y="384" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">at rest</text>
+<rect x="594" y="320" width="170" height="76" rx="10" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(636 364) rotate(-70) scale(0.8)"><use href="#lander"/></g>
+<line x1="608" y1="379" x2="660" y2="379" stroke="#1f2328" stroke-width="1.6"/>
+<rect x="676" y="332" width="76" height="24" rx="12" fill="#eaf0f6" stroke="#24496d" stroke-opacity="0.5"/>
+<text x="714" y="349" font-size="13" fill="#24496d" text-anchor="middle" font-weight="700">−100</text>
+<text x="714" y="384" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">crash</text>
+<rect x="820" y="1" width="380" height="418" rx="16" fill="#f3f7fb" stroke="#cfdbe8" stroke-width="1.5"/>
+<text x="1010.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">One landing attempt</text>
+<text x="1010" y="70" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400" font-style="italic">t = 0</text>
+<rect x="990" y="80" width="40" height="34" rx="7" fill="#fff" stroke="#dbe2ea" stroke-width="1.4"/>
+<text x="978" y="102" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">+0.9</text>
+<rect x="990" y="124" width="40" height="34" rx="7" fill="#fff" stroke="#dbe2ea" stroke-width="1.4"/>
+<text x="978" y="146" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">−0.2</text>
+<rect x="990" y="168" width="40" height="34" rx="7" fill="#fff" stroke="#dbe2ea" stroke-width="1.4"/>
+<text x="978" y="190" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">+1.1</text>
+<rect x="990" y="212" width="40" height="34" rx="7" fill="#fff" stroke="#2f5d8a" stroke-width="2.4"/>
+<text x="978" y="234" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">−0.6</text>
+<rect x="990" y="256" width="40" height="34" rx="7" fill="#fff" stroke="#dbe2ea" stroke-width="1.4"/>
+<text x="978" y="278" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">+0.4</text>
+<rect x="990" y="300" width="40" height="34" rx="7" fill="#fff" stroke="#dbe2ea" stroke-width="1.4"/>
+<text x="978" y="322" font-size="13" fill="#59636e" text-anchor="end" font-weight="400">−1.3</text>
+<path d="M1010 348 V364" stroke="#4a5a6c" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="940" y="368" width="140" height="34" rx="17" fill="#fff" stroke="#2f5d8a" stroke-width="2"/>
+<text x="1010" y="390" font-size="14" fill="#24496d" text-anchor="middle" font-weight="700">−100  crash</text>
+<path d="M1080 378 C 1115 340, 1090 270, 1036 228" fill="none" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah-o)"/>
+<circle cx="1104" cy="300" r="12" fill="#2f5d8a"/>
+<text x="1104" y="305" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">?</text>
+<text x="1104" y="330" font-size="13" fill="#24496d" text-anchor="middle" font-weight="400" font-style="italic">this action?</text>
+<path d="M1150 80 H1162 V344 H1150" fill="none" stroke="#2f5d8a" stroke-width="2"/>
+<circle cx="1162" cy="150" r="12" fill="#2f5d8a"/>
+<text x="1162" y="155" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">?</text>
+<text x="1162" y="128" font-size="13" fill="#24496d" text-anchor="end" font-weight="400" font-style="italic">several steps?</text>
+<g transform="translate(842 140) scale(0.9)" fill="none" stroke="#9aa7b5" stroke-width="2.4" stroke-linecap="round"><path d="M0 0 H38 a9 9 0 1 0 -9 -9"/><path d="M0 12 H52 a8 8 0 1 1 -8 8"/><path d="M0 24 H30"/></g>
+<g transform="translate(842 250) scale(0.9)" fill="none" stroke="#9aa7b5" stroke-width="2.4" stroke-linecap="round"><path d="M0 0 H38 a9 9 0 1 0 -9 -9"/><path d="M0 12 H52 a8 8 0 1 1 -8 8"/><path d="M0 24 H30"/></g>
+<circle cx="868" cy="318" r="12" fill="#2f5d8a"/>
+<text x="868" y="323" font-size="15" fill="#fff" text-anchor="middle" font-weight="700">?</text>
+<text x="868" y="348" font-size="13" fill="#24496d" text-anchor="middle" font-weight="400" font-style="italic">the wind?</text>
+<path d="M362 210 H396" stroke="#4a5a6c" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M782 210 H816" stroke="#4a5a6c" stroke-width="2" marker-end="url(#ah)"/>
+</svg>
+          <figcaption>Learning from the reward in Lunar Lander with wind.</figcaption>
+        </figure>
+        <div class="flow burden">
+          <h3>Reward decoding burden</h3>
+          <div class="flow-row">
+            <span class="flow-label">One step</span>
+            <span class="causes"><span>the action</span><span>the state it starts from</span><span>the wind</span></span>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <span class="scalar">one reward</span>
+          </div>
+          <div class="flow-row">
+            <span class="flow-label">One landing</span>
+            <span class="causes"><span>hundreds of actions</span><span>gusts</span></span>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <span class="scalar">one final reward</span>
+          </div>
+          <div class="flow-row decode">
+            <span class="flow-label">The agent</span>
+            <span class="decode-text"><span class="qm">?</span>decodes from these scalars which action it should change</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section why" id="principle">
+        <h2>Principles in tasks</h2>
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="ta" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d1861f"/></marker></defs></svg>
+          <div class="task-principles">
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="32" stroke-dasharray="3 4"/><line x1="50" y1="50" x2="30" y2="74"/><circle cx="50" cy="50" r="3" class="f"/><circle cx="30" cy="74" r="5"/><path d="M22 60 A32 32 0 0 1 30 26" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Pendulum</h4><p>Build up energy, then keep balance</p></div></div>
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M38 30 h24 l6 14 h-36 z"/><line x1="36" y1="44" x2="28" y2="58"/><line x1="64" y1="44" x2="72" y2="58"/><line x1="12" y1="86" x2="88" y2="86"/><path d="M50 52 V74" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Lunar Lander</h4><p>Land softly and stay upright</p></div></div>
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 80 C 24 40, 40 40, 50 64 S 78 96, 96 30"/><rect x="38" y="48" width="16" height="9" rx="2" transform="rotate(40 46 52)"/><line x1="92" y1="30" x2="92" y2="14"/><path d="M92 14 l9 4 l-9 4"/><path d="M58 74 Q 70 80 78 66" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Mountain Car</h4><p>Build up energy to reach the top</p></div></div>
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="80" x2="94" y2="80"/><rect x="34" y="64" width="32" height="14" rx="2"/><line x1="50" y1="64" x2="58" y2="20"/><circle cx="58" cy="20" r="4"/><path d="M40 90 H64" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Cart-pole</h4><p>Keep the pole over the cart</p></div></div>
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="36" stroke-dasharray="2 4"/><line x1="50" y1="50" x2="74" y2="34"/><line x1="74" y1="34" x2="70" y2="62"/><circle cx="50" cy="50" r="3" class="f"/><circle cx="78" cy="70" r="5" stroke-dasharray="2 2"/><path d="M66 26 Q 84 34 82 52" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Reacher</h4><p>Move toward the goal posture</p></div></div>
+          <div class="tp"><svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="50" y1="10" x2="54" y2="34"/><line x1="54" y1="34" x2="44" y2="56"/><line x1="44" y1="56" x2="52" y2="78"/><line x1="40" y1="80" x2="64" y2="80"/><circle cx="54" cy="34" r="2.5" class="f"/><circle cx="44" cy="56" r="2.5" class="f"/><path d="M66 70 Q 78 50 70 30" fill="none" stroke="#d1861f" stroke-width="2.4" stroke-linecap="round" marker-end="url(#ta)"/></g></svg><div><h4>Hopper</h4><p>Push off, then land softly</p></div></div>
+          </div>
+        <div class="flow principles">
+          <h3>Principles of behavior</h3>
+          <p class="principles-def">A principle is a simple norm of good behavior. It says how to behave, not which action to take, so the same principle holds when the state or the dynamics change.</p>
+          <ul class="norms">
+            <li><b>Keep your balance</b><span>keep the body over its support</span></li>
+            <li><b>Build up energy</b><span>push along the motion to swing higher</span></li>
+            <li><b>Slow down before arriving</b><span>brake in time to stop where you must</span></li>
+            <li><b>Keep clear of obstacles</b><span>stay as far from them as you can</span></li>
+            <li><b>Land softly</b><span>touch down slowly and absorb the impact</span></li>
+            <li><b>Move toward the goal posture</b><span>turn each joint toward where it should end</span></li>
           </ul>
-        </section>
-        <section class="system">
-          <h3>Thrust vehicles</h3>
-          <p>Thrust changes the velocity and attitude of the whole vehicle.</p>
-          <ul>
-            <li>Holding balance in wind</li>
-            <li>Decelerating to land</li>
-            <li>Landing with balance and deceleration together</li>
-          </ul>
-        </section>
-        <section class="system">
-          <h3>Ground vehicles</h3>
-          <p>A driving force moves the vehicle along terrain shaped by gravity.</p>
-          <ul>
-            <li>Climbing a hill by accumulating energy</li>
-            <li>Arriving at the top with low speed</li>
-          </ul>
-        </section>
-        <section class="system">
-          <h3>Legged jumping and locomotion</h3>
-          <p>Joint torques propel the body through contact with the ground.</p>
-          <ul>
-            <li>Taking off, jumping high and jumping far</li>
-            <li>Hopping forward and landing still</li>
-            <li>Continuous hopping</li>
-          </ul>
-        </section>
-        <section class="system">
-          <h3>Object manipulation</h3>
-          <p>The agent moves another object through contact.</p>
-          <ul>
-            <li>Pushing an object to a target</li>
-            <li>Picking and placing</li>
-          </ul>
-        </section>
-      </div>
+          <p class="pr-more">Click the <a href="#examples">examples above</a> to see how the principles of each task are taught and what the agent learns.</p>
+        </div>
+      </section>
+
+      <section class="section" id="implementation">
+        <h2>Implementation of PPL</h2>
+        <figure class="figure">
+          <svg class="figure-svg" viewBox="0 0 1200 420" role="img" aria-label="How a principle guides each action in Lunar Lander" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Helvetica Neue, Arial, sans-serif">
+<defs>
+<g id="lander" fill="#fff" stroke="#4a5a6c" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+  <line x1="-11" y1="7" x2="-21" y2="20"/><line x1="11" y1="7" x2="21" y2="20"/>
+  <line x1="-25" y1="20" x2="-17" y2="20"/><line x1="17" y1="20" x2="25" y2="20"/>
+  <path d="M-3 9 h6 l1.5 4 h-9 z"/><rect x="-15" y="-3" width="30" height="12" rx="2"/>
+  <line x1="-7" y1="-3" x2="-7" y2="9"/><line x1="0" y1="-3" x2="0" y2="9"/><line x1="7" y1="-3" x2="7" y2="9"/>
+  <path d="M-9 -3 L-6 -14 H6 L9 -3 Z"/><line x1="5" y1="-14" x2="9" y2="-21"/>
+</g>
+<marker id="pa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4a5a6c"/></marker>
+<marker id="pa-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2f5d8a"/></marker>
+<marker id="pa-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d1861f"/></marker>
+<marker id="pa-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8f9bab"/></marker>
+</defs>
+<rect x="0" y="1" width="390" height="418" rx="16" fill="#fff" stroke="#dbe2ea" stroke-width="1.5"/>
+<text x="195.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">From principle to reference</text>
+<rect x="40" y="62" width="94" height="26" rx="13" fill="#eaf0f6" stroke="#2f5d8a" stroke-opacity="0.55"/>
+<text x="87.0" y="80" font-size="13" fill="#2f5d8a" text-anchor="middle" font-weight="600" font-style="italic">closer</text>
+<rect x="148" y="62" width="94" height="26" rx="13" fill="#eaf0f6" stroke="#2f5d8a" stroke-opacity="0.55"/>
+<text x="195.0" y="80" font-size="13" fill="#2f5d8a" text-anchor="middle" font-weight="600" font-style="italic">upright</text>
+<rect x="256" y="62" width="94" height="26" rx="13" fill="#eaf0f6" stroke="#2f5d8a" stroke-opacity="0.55"/>
+<text x="303.0" y="80" font-size="13" fill="#2f5d8a" text-anchor="middle" font-weight="600" font-style="italic">slower</text>
+<polyline points="20,370 90,352 130,370 250,370 300,350 370,365" fill="none" stroke="#1f2328" stroke-width="2"/>
+<line x1="130" y1="370" x2="130" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M130 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
+<line x1="250" y1="370" x2="250" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M250 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
+<path d="M282 175 C 230 185, 190 240, 190 340" fill="none" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="6 5"/>
+<g transform="translate(300 160) rotate(22) scale(1.4)" opacity="1"><use href="#lander"/></g>
+<path d="M300 185 L322 262" stroke="#8f9bab" stroke-width="3" marker-end="url(#pa-g)"/>
+<text x="332" y="280" font-size="12" fill="#59636e" text-anchor="start" font-weight="400" font-style="italic">velocity now</text>
+<path d="M290 182 L222 214" stroke="#2f5d8a" stroke-width="3" marker-end="url(#pa-b)"/>
+<text x="202" y="208" font-size="12" fill="#2f5d8a" text-anchor="end" font-weight="400" font-style="italic">reference</text>
+<path d="M332 128 q22 10 14 34" fill="none" stroke="#2f5d8a" stroke-width="2" marker-end="url(#pa-b)"/>
+<text x="195" y="404" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">references computed from height, tilt and position</text>
+<rect x="420" y="1" width="380" height="418" rx="16" fill="#fff" stroke="#dbe2ea" stroke-width="1.5"/>
+<text x="610.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Each action is scored</text>
+<text x="610" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">how far one step moves the velocity toward its reference</text>
+<rect x="436" y="96" width="168" height="140" rx="12" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(478 142) rotate(0) scale(0.85)" opacity="1"><use href="#lander"/></g>
+<rect x="528" y="118" width="62" height="26" rx="13" fill="#fcf0dd" stroke="#a8640f" stroke-opacity="0.55"/>
+<text x="559.0" y="136" font-size="14" fill="#a8640f" text-anchor="middle" font-weight="600">−0.3</text>
+<text x="559" y="168" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">no engine</text>
+<line x1="454" y1="204" x2="586" y2="204" stroke="#dbe2ea" stroke-width="2"/>
+<line x1="470" y1="195" x2="470" y2="213" stroke="#2f5d8a" stroke-width="3"/>
+<path d="M534 204 L568 204" stroke="#d1861f" stroke-width="3" marker-end="url(#pa-o)"/>
+<text x="470" y="228" font-size="10" fill="#2f5d8a" text-anchor="middle" font-weight="400">reference</text>
+<text x="534" y="228" font-size="10" fill="#59636e" text-anchor="middle" font-weight="400">now</text>
+<circle cx="534" cy="204" r="5" fill="#8f9bab"/>
+<rect x="614" y="96" width="168" height="140" rx="12" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(656 142) rotate(0) scale(0.85)" opacity="1"><path d="M-3 12 L0 24 L3 12 Z" fill="#d1861f"/><use href="#lander"/></g>
+<rect x="706" y="118" width="62" height="26" rx="13" fill="#eaf0f6" stroke="#2f5d8a" stroke-opacity="0.55"/>
+<text x="737.0" y="136" font-size="14" fill="#2f5d8a" text-anchor="middle" font-weight="600">+0.6</text>
+<text x="737" y="168" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">main engine</text>
+<line x1="632" y1="204" x2="764" y2="204" stroke="#dbe2ea" stroke-width="2"/>
+<line x1="648" y1="195" x2="648" y2="213" stroke="#2f5d8a" stroke-width="3"/>
+<path d="M712 204 L668 204" stroke="#2f5d8a" stroke-width="3" marker-end="url(#pa-b)"/>
+<circle cx="712" cy="204" r="5" fill="#8f9bab"/>
+<rect x="436" y="250" width="168" height="140" rx="12" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(478 296) rotate(0) scale(0.85)" opacity="1"><path d="M16 -1 L26 1 L16 3 Z" fill="#d1861f"/><use href="#lander"/></g>
+<rect x="528" y="272" width="62" height="26" rx="13" fill="#eaf0f6" stroke="#2f5d8a" stroke-opacity="0.55"/>
+<text x="559.0" y="290" font-size="14" fill="#2f5d8a" text-anchor="middle" font-weight="600">+0.2</text>
+<text x="559" y="322" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">side engine</text>
+<line x1="454" y1="358" x2="586" y2="358" stroke="#dbe2ea" stroke-width="2"/>
+<line x1="470" y1="349" x2="470" y2="367" stroke="#2f5d8a" stroke-width="3"/>
+<path d="M534 358 L508 358" stroke="#2f5d8a" stroke-width="3" marker-end="url(#pa-b)"/>
+<circle cx="534" cy="358" r="5" fill="#8f9bab"/>
+<rect x="614" y="250" width="168" height="140" rx="12" fill="#f7f8fa" stroke="#dbe2ea"/>
+<g transform="translate(656 296) rotate(0) scale(0.85)" opacity="1"><path d="M-16 -1 L-26 1 L-16 3 Z" fill="#d1861f"/><use href="#lander"/></g>
+<rect x="706" y="272" width="62" height="26" rx="13" fill="#fcf0dd" stroke="#a8640f" stroke-opacity="0.55"/>
+<text x="737.0" y="290" font-size="14" fill="#a8640f" text-anchor="middle" font-weight="600">−0.2</text>
+<text x="737" y="322" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="400">other side</text>
+<line x1="632" y1="358" x2="764" y2="358" stroke="#dbe2ea" stroke-width="2"/>
+<line x1="648" y1="349" x2="648" y2="367" stroke="#2f5d8a" stroke-width="3"/>
+<path d="M712 358 L738 358" stroke="#d1861f" stroke-width="3" marker-end="url(#pa-o)"/>
+<circle cx="712" cy="358" r="5" fill="#8f9bab"/>
+<rect x="820" y="1" width="380" height="418" rx="16" fill="#f3f7fb" stroke="#cfdbe8" stroke-width="1.5"/>
+<text x="1010.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Update</text>
+<text x="1010" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">actions with a higher score become more likely</text>
+<polyline points="840,370 900,352 930,370 1030,370 1080,352 1180,366" fill="none" stroke="#1f2328" stroke-width="2"/>
+<line x1="930" y1="370" x2="930" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M930 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
+<line x1="1030" y1="370" x2="1030" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M1030 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
+<path d="M1150 120 C 1170 220, 1160 300, 1130 352" fill="none" stroke="#8f9bab" stroke-width="2.5"/>
+<text x="1160" y="250" font-size="13" fill="#59636e" text-anchor="start" font-weight="400" font-style="italic">early</text>
+<g transform="translate(1128 350) rotate(-70) scale(0.75)" opacity="0.75"><use href="#lander"/></g>
+<path d="M1150 120 C 1060 120, 990 200, 980 334" fill="none" stroke="#2f5d8a" stroke-width="3"/>
+<circle cx="1150" cy="120" r="6" fill="#1f2328"/>
+<text x="1004" y="214" font-size="14" fill="#2f5d8a" text-anchor="end" font-weight="600" font-style="italic">trained</text>
+<g transform="translate(980 352) rotate(0) scale(0.85)" opacity="1"><use href="#lander"/></g>
+<path d="M392 210 H416" stroke="#4a5a6c" stroke-width="2" marker-end="url(#pa)"/>
+<path d="M802 210 H816" stroke="#4a5a6c" stroke-width="2" marker-end="url(#pa)"/>
+</svg>
+          <figcaption>A principle guides every action in Lunar Lander.</figcaption>
+        </figure>
+        <div class="flow steps">
+          <div class="step"><span class="num">1</span><h4>Principle</h4><p>Stay upright, approach the pad, and do not descend too fast.</p></div>
+          <div class="step"><span class="num">2</span><h4>Key quantity</h4><p>What the action changes directly in one step, here the velocities.</p></div>
+          <div class="step"><span class="num">3</span><h4>Reference</h4><p>The velocity to reach after this step, from the height, tilt and position.</p></div>
+          <div class="step"><span class="num">4</span><h4>Each step</h4><p>An action scores by how far it moves the velocity toward the reference.</p></div>
+        </div>
+        <div class="eqs two">
+          <div class="eq">
+            <h4>Score each action</h4>
+            <div class="math">\[ \delta(s,a)=\tfrac12\big\|\widetilde{\bm q}(s)-\bm q(s)\big\|^2-\tfrac12\big\|\widetilde{\bm q}(s)-\bm q(s')\big\|^2 \]</div>
+            <p>How much closer one step brings the key quantity to its reference.</p>
+          </div>
+          <div class="eq">
+            <h4>Make good actions more likely</h4>
+            <div class="math">\[ \theta\leftarrow\theta+\eta\,\mathbb{E}\big[\delta(s,a)\,\nabla_\theta\log\pi_\theta(a\mid s)\big] \]</div>
+            <p>Actions with a higher score become more likely.</p>
+          </div>
+        </div>
+        <p class="legend">\(\bm q\) key quantity, such as an angular velocity · \(\widetilde{\bm q}(s)\) the value it should reach after this step · \(s, s'\) the state before and after the action · <a href="https://arxiv.org/abs/2611.07130?ref=welcome.ai" target="_blank" rel="noopener">details in the paper ↗</a></p>
+      </section>
     </div>
   </main>
 
-  <footer>
-    <div class="wrap">Scenario pages and training code are being added.</div>
-  </footer>
+  <div data-site-footer></div>
+  <script src="assets/layout.js" data-part="footer"></script>
+
+  <script src="data/pendulums/pendulum_swing_up.js"></script>
+  <script src="assets/thumbs.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+  <script>
+    (function () {
+      const el = document.querySelector("[data-rotate]");
+      if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const words = el.dataset.rotate.split("|");
+      let k = 0;
+      setInterval(() => {
+        k = (k + 1) % words.length;
+        el.style.opacity = 0;
+        setTimeout(() => { el.textContent = words[k]; el.style.opacity = 1; }, 250);
+      }, 2200);
+
+    })();
+  </script>
 </body>
 </html>

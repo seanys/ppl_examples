@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pendulums and Linkages</title>
+  <meta name="description" content="Pendulum tasks learned with prescriptive policy learning: the learned behavior, the principles taught, and the training code.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body id="top">
+  <div data-site-header></div>
+  <script src="assets/layout.js"></script>
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html#examples">Examples</a> / Pendulums and linkages</p>
+      <h1>Pendulums and linkages</h1>
+      <p class="intro">Joint torques rotate a chain of links toward a posture or bring its tip to a target.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <article class="task" id="pendulum-swing-up">
+        <div class="task-head">
+          <h2>Swing up and stay upright</h2>
+          <span class="tag">Pendulum-v1</span>
+        </div>
+        <div class="split">
+          <div class="player" data-player data-run="pendulum_swing_up" data-rules="#pendulum-rules">
+            <canvas aria-label="Animation of the learned pendulum policy"></canvas>
+            <p class="player-error" hidden>The trajectory data could not be loaded.</p>
+            <div class="controls">
+              <button type="button" data-play>Play</button>
+              <input type="range" min="0" max="200" step="0.01" value="0" data-slider aria-label="Time">
+              <span class="clock" data-clock>0.00 s</span>
+              <select data-speed aria-label="Playback speed">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
+            </div>
+            <div class="episodes" data-episodes aria-label="Episode"></div>
+          </div>
+
+          <div class="rules" id="pendulum-rules">
+            <p class="desc">The pendulum swings up from any angle and stays upright. PPL learns this in 40,000 steps.</p>
+            <dl class="defs">
+              <dt>Key quantity</dt><dd>angular velocity \(\omega\)</dd>
+              <dt>Threshold speed</dt><dd>\(\omega^*(\theta)=\sqrt{\tfrac{3g}{l}\,(1-\cos\theta)}\), the speed that just coasts to the top, taken at the next-step angle \(\theta'\)</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr data-rule="0"><td>Accumulate energy</td><td>\(|\theta|>0.41\) rad</td><td>\(\omega^*(\theta')\) along the rotation</td></tr>
+                <tr data-rule="1"><td>Stay upright</td><td>\(|\theta|\le 0.41\) rad</td><td>\(\omega^*(\theta')\) toward the top</td></tr>
+              </tbody>
+            </table>
+            <p class="note">At 0.41 rad the largest torque just holds the pendulum against gravity.</p>
+
+            <div class="run">
+              <h3>Train it yourself</h3>
+              <div class="downloads">
+                <a class="btn primary" href="examples/pendulums/pendulum_swing_up.py" data-download="pendulum_swing_up.py">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>pendulum_swing_up.py</a>
+                <a class="btn" href="examples/pendulums/requirements.txt" data-download="requirements.txt">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+              </div>
+              <div class="terminal">
+                <button type="button" class="copy" data-copy>Copy</button>
+                <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python pendulum_swing_up.py</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <div data-site-footer></div>
+  <script src="assets/layout.js" data-part="footer"></script>
+
+  <script src="data/pendulums/pendulum_swing_up.js"></script>
+  <script src="assets/pendulum_player.js"></script>
+  <script src="assets/site.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '\\(', right: '\\)', display: false}]});"></script>
+</body>
+</html>
