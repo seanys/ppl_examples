@@ -340,3 +340,9 @@ main { flex: 1 0 auto; }
 .norms b { font-size: 1.08rem; margin-bottom: 4px; }
 .norms span { font-size: 0.98rem; }
 .pr-more { font-size: 1rem; margin-top: 16px; }
+.example svg.thumb { display: block; width: 100%; aspect-ratio: 16 / 10; background: linear-gradient(180deg, #f6f8fb, #eef2f7); border-bottom: 1px solid var(--line); }
+.acrobot .upper { animation: acro-upper 3.2s ease-in-out infinite alternate; }
+.acrobot .lower { animation: acro-lower 3.2s ease-in-out infinite alternate; }
+@keyframes acro-upper { from { transform: rotate(-50deg); } to { transform: rotate(50deg); } }
+@keyframes acro-lower { from { transform: rotate(-40deg); } to { transform: rotate(40deg); } }
+@media (prefers-reduced-motion: reduce) { .acrobot .upper, .acrobot .lower { animation: none; transform: rotate(30deg); } }

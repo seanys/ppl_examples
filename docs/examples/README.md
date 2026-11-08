@@ -2,7 +2,7 @@
 
 Each folder holds one kind of system, and each file trains one scenario:
 
-- `pendulums/` pendulums and linkages
+- `underactuated/` underactuated control
 - `thrust_vehicles/` thrust vehicles
 - `ground_vehicles/` ground vehicles
 - `legged/` legged jumping and locomotion
