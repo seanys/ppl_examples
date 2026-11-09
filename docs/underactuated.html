@@ -60,11 +60,11 @@
                 <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
               </thead>
               <tbody>
-                <tr data-rule="0"><td>Accumulate energy</td><td>\(|\theta|>0.41\) rad</td><td>\(\omega^*(\theta')\) along the rotation</td></tr>
-                <tr data-rule="1"><td>Stay upright</td><td>\(|\theta|\le 0.41\) rad</td><td>\(\omega^*(\theta')\) toward the top</td></tr>
+                <tr data-rule="0"><td>Accumulate energy</td><td>\(|\theta|>0.41\) rad</td><td>\(\omega\to\operatorname{sgn}(\omega)\,\omega^*(\theta')\)</td></tr>
+                <tr data-rule="1"><td>Stay upright</td><td>\(|\theta|\le 0.41\) rad</td><td>\(\omega\to-\operatorname{sgn}(\theta')\,\omega^*(\theta')\)</td></tr>
               </tbody>
             </table>
-            <p class="note">At 0.41 rad the largest torque just holds the pendulum against gravity.</p>
+            <p class="note">\(\theta\) is measured from upright and \(\omega\) is its rate. At 0.41 rad the largest torque just holds the pendulum against gravity.</p>
             </section>
 
             <section class="panel">
@@ -128,7 +128,7 @@
                 <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
               </thead>
               <tbody>
-                <tr data-rule="0"><td>Accumulate energy</td><td>always</td><td>\(4\pi\) rad/s along the elbow rotation</td></tr>
+                <tr data-rule="0"><td>Accumulate energy</td><td>always</td><td>\(\omega_2\to4\pi\operatorname{sgn}(\omega_2)\) rad/s</td></tr>
               </tbody>
             </table>
             <p class="note">Pushing along the elbow rotation makes the motor add energy at every step.</p>
@@ -196,10 +196,10 @@
                 <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
               </thead>
               <tbody>
-                <tr data-rule="0"><td>Stay upright</td><td>always</td><td>\(\omega^*(\theta')\) toward upright</td></tr>
+                <tr data-rule="0"><td>Stay upright</td><td>always</td><td>\(\omega\to-\operatorname{sgn}(\theta')\,\omega^*(\theta')\)</td></tr>
               </tbody>
             </table>
-            <p class="note">The pole turns back fast when far from upright and slows down as it arrives.</p>
+            <p class="note">\(\theta\) is measured from upright and \(\omega\) is its rate. The pole turns back fast when far from upright and slows down as it arrives.</p>
             </section>
 
             <section class="panel">

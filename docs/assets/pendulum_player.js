@@ -1,5 +1,6 @@
-// Player for pendulum and acrobot episodes (data.kind "acrobot": two links, the elbow driven): draws the system from
-// recorded angles and torques, with play, pause, a time slider,
+// Player for pendulum, acrobot (data.kind "acrobot": two links, the elbow driven), cart-pole and lander episodes (data.kind
+// "lander": positions, angle and fired engine in world coordinates): draws the system from recorded states and actions,
+// with play, pause, a time slider,
 // speed and episode choice. The active principle is marked in the principle table (rows with data-rule="0" or "1").
 (function () {
   function css(name) {
@@ -136,10 +137,57 @@
       rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
     }
 
+    function drawLander() {
+      // world coordinates (m) of Lunar Lander: a 14 m square view around the pad, the terrain, the two flags, the lander
+      // with its fired engine (action 1 left, 2 main, 3 right) and the path it has flown
+      const w = canvas.clientWidth, view = 14, x0 = data.width / 2 - view / 2, y0 = 1.0, s = w / view;
+      const X = (x) => (x - x0) * s, Y = (y) => w - (y - y0) * s;
+      const i = Math.min(Math.round(t), ep.angle.length - 1);
+      const [xa, xb, f] = sample(ep.x), [ya, yb] = sample(ep.y);
+      const x = xa + (xb - xa) * f, y = ya + (yb - ya) * f, th = angleAt(ep.angle);
+      const a = ep.action[Math.min(i, ep.action.length - 1)];
+      ctx.clearRect(0, 0, w, w);
+      ctx.fillStyle = css("--line");
+      ctx.beginPath(); ctx.moveTo(X(ep.terrain[0][0]), w);
+      ep.terrain.forEach((p) => ctx.lineTo(X(p[0]), Y(p[1])));
+      ctx.lineTo(X(ep.terrain[ep.terrain.length - 1][0]), w); ctx.closePath(); ctx.fill();
+      [ep.pad[0], ep.pad[1]].forEach((fx) => {
+        const fy = ep.pad[2];
+        ctx.strokeStyle = css("--muted"); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(X(fx), Y(fy)); ctx.lineTo(X(fx), Y(fy + 1.67)); ctx.stroke();
+        ctx.fillStyle = "#e3b505";
+        ctx.beginPath(); ctx.moveTo(X(fx), Y(fy + 1.67)); ctx.lineTo(X(fx), Y(fy + 1.33)); ctx.lineTo(X(fx + 0.83), Y(fy + 1.5)); ctx.fill();
+      });
+      ctx.strokeStyle = css("--rod"); ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(X(ep.x[0]), Y(ep.y[0]));
+      for (let k = 1; k <= i; k++) ctx.lineTo(X(ep.x[k]), Y(ep.y[k]));
+      ctx.stroke(); ctx.globalAlpha = 1;
+      // body frame: x to the right of the lander, y up, rotated by the lander angle (counterclockwise positive)
+      ctx.save();
+      ctx.translate(X(x), Y(y)); ctx.rotate(-th); ctx.scale(s, -s);
+      ctx.fillStyle = css("--torque");
+      if (a === 2) { ctx.beginPath(); ctx.moveTo(-0.2, -0.33); ctx.lineTo(0.2, -0.33); ctx.lineTo(0, -1.1); ctx.fill(); }
+      if (a === 1 || a === 3) {
+        const sd = a === 1 ? -1 : 1;
+        ctx.beginPath(); ctx.moveTo(sd * 0.6, 0.15); ctx.lineTo(sd * 0.6, -0.1); ctx.lineTo(sd * 1.1, 0.02); ctx.fill();
+      }
+      ctx.strokeStyle = css("--rod"); ctx.lineWidth = 0.12; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(-0.4, -0.33); ctx.lineTo(-0.7, -0.8); ctx.moveTo(0.4, -0.33); ctx.lineTo(0.7, -0.8); ctx.stroke();
+      ctx.fillStyle = css("--rod");
+      ctx.beginPath(); ctx.moveTo(-0.47, -0.33); ctx.lineTo(0.47, -0.33); ctx.lineTo(0.6, 0.1); ctx.lineTo(0.33, 0.43);
+      ctx.lineTo(-0.33, 0.43); ctx.lineTo(-0.6, 0.1); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      clock.textContent = (t * data.dt).toFixed(2) + " s";
+      slider.value = t;
+      const active = ep.rule[i];
+      rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
+    }
+
     function draw() {
       if (!ep) return;
       if (data.kind === "acrobot") return drawAcrobot();
       if (data.kind === "cartpole") return drawCartpole();
+      if (data.kind === "lander") return drawLander();
       const w = canvas.clientWidth, cx = w / 2, cy = w / 2, R = w * 0.34;
       const th = angleAt();
       const i = Math.min(Math.round(t), ep.angle.length - 1);

@@ -19,15 +19,81 @@
     <div class="wrap">
       <p class="crumbs"><a href="index.html#examples">Examples</a> / Thrust-driven vehicles</p>
       <h1>Thrust-driven vehicles</h1>
-      <p class="intro">Thrust-driven vehicles move only through the forces of their engines, such as a lander with a main engine and two side engines.</p>
+      <p class="intro">Thrust-driven vehicles move only through the forces of their engines, such as a lander with a main engine and two side engines. The agent decides which engine to fire at each moment to steer the vehicle where it should go.</p>
     </div>
   </section>
 
   <main>
     <div class="wrap">
-      <article class="task wip">
-        <h2>Working on it</h2>
-        <p>The examples of this category are in preparation.</p>
+      <article class="task" id="lunar-lander-stabilize">
+        <div class="task-head">
+          <h2>Stabilize above the pad</h2>
+          <span class="tag">LunarLander-v3</span>
+        </div>
+        <div class="split">
+          <div class="player" data-player data-run="lunar_lander_stabilize" data-rules="#lander-rules">
+            <canvas aria-label="Animation of the learned lander policy"></canvas>
+            <p class="player-error" hidden>The trajectory data could not be loaded.</p>
+            <div class="controls">
+              <button type="button" data-play>Play</button>
+              <input type="range" min="0" max="1000" step="0.01" value="0" data-slider aria-label="Time">
+              <span class="clock" data-clock>0.00 s</span>
+              <select data-speed aria-label="Playback speed">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
+            </div>
+            <div class="episodes" data-episodes aria-label="Episode"></div>
+          </div>
+
+          <div class="rules" id="lander-rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantities</dt><dd>vertical velocity \(v_y\), angular velocity \(\omega\), horizontal velocity \(v_x\)</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e,a)=\operatorname{sgn}(e)\min\big(\sqrt{2a|e|},\,|e|/\tau\big)\): fast when far, slowing down on arrival</dd>
+              <dt>Target tilt</dt><dd>\(\tilde\theta=\theta_l\operatorname{clip}\big((v_x-v^*(-x',a_x))/0.5,\,-1,\,1\big)\), the lean the remaining \(v_x\) still needs</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr data-rule="0"><td>Return to the height</td><td>always</td><td>\(v_y\to v^*(7\,\text{m}-h',\,a_y)\)</td></tr>
+                <tr data-rule="0"><td>Return to the centre</td><td>always</td><td>\(v_x\to v^*(-x',\,a_x)\)</td></tr>
+                <tr data-rule="0"><td>Lean as needed</td><td>always</td><td>\(\omega\to\operatorname{sgn}(\tilde\theta-\theta')\sqrt{2a_\omega|\tilde\theta-\theta'|}\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">Primes mark the next state with the engines off; \(h\) is the height above the pad.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 33,767 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 20 evaluation episodes stay between the flags within 0.5 m of 7 m for their last 5 s</dd>
+              <dt>Converges in</dt><dd>15 updates</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/thrust_vehicles/lunar_lander_stabilize.py" data-download="lunar_lander_stabilize.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>lunar_lander_stabilize.py</a>
+            <a class="btn" href="examples/thrust_vehicles/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python lunar_lander_stabilize.py</code></pre>
+          </div>
+        </div>
       </article>
     </div>
   </main>
@@ -35,6 +101,8 @@
   <div data-site-footer></div>
   <script src="assets/layout.js" data-part="footer"></script>
 
+  <script src="data/thrust_vehicles/lunar_lander_stabilize.js"></script>
+  <script src="assets/pendulum_player.js"></script>
   <script src="assets/site.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"

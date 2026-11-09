@@ -90,6 +90,7 @@ a:hover { text-decoration: underline; }
 .rules > p b { margin-right: 6px; }
 .rules table { margin: 6px 0 0; }
 .rules td { white-space: nowrap; }
+.rules td:last-child { white-space: normal; }
 @media (max-width: 480px) { .rules td { white-space: normal; } }
 
 /* shared header and footer */
@@ -357,3 +358,4 @@ main { flex: 1 0 auto; }
 .task.wip { padding: 72px 24px; text-align: center; border-style: dashed; border-color: #c4ccd5; background: var(--card); box-shadow: none; }
 .task.wip h2 { margin: 0 0 8px; font-size: 1.4rem; }
 .task.wip p { margin: 0; color: var(--muted); }
+.task .player { display: flex; flex-direction: column; justify-content: center; }
