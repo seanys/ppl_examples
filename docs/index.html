@@ -47,6 +47,13 @@
               <p>Thrust-driven vehicles move only through the forces of their engines, such as a lander with a main engine and two side engines. The agent coordinates the vehicle's translation and rotation to reach a target position or follow a desired trajectory.</p>
             </div>
           </a>
+          <a class="example" href="robot-arms.html">
+            <svg class="thumb pusher" viewBox="0 0 320 200" role="img" aria-label="A robot arm pushing a cylinder toward a goal"><line x1="40" y1="170" x2="280" y2="170" stroke="#c4ccd5" stroke-width="2"/><circle cx="236" cy="150" r="16" fill="none" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="4 4"/><rect x="62" y="150" width="36" height="20" rx="3" fill="#fff" stroke="#4a5a6c" stroke-width="2.5"/><line x1="80" y1="150" x2="112" y2="82" stroke="#2f5d8a" stroke-width="7" stroke-linecap="round"/><line x1="112" y1="82" x2="160" y2="140" stroke="#2f5d8a" stroke-width="7" stroke-linecap="round"/><path d="M166 132 L166 160 M160 132 L174 132 M160 160 L174 160" stroke="#2f5d8a" stroke-width="4" stroke-linecap="round" fill="none"/><circle cx="80" cy="150" r="4" fill="#1f2328"/><circle cx="112" cy="82" r="4" fill="#fff" stroke="#2f5d8a" stroke-width="2"/><circle cx="190" cy="152" r="14" fill="#d1861f"/></svg>
+            <div class="body">
+              <h3>Robot arms</h3>
+              <p>Robot arms move objects through contact, such as an arm pushing a cylinder across a table. The agent turns the arm's joints so that its hand meets the object in the right way and carries it to the goal.</p>
+            </div>
+          </a>
         </div>
 
         <div class="coming">
@@ -258,8 +265,8 @@
 <path d="M332 128 q22 10 14 34" fill="none" stroke="#2f5d8a" stroke-width="2" marker-end="url(#pa-b)"/>
 <text x="195" y="404" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">references computed from height, tilt and position</text>
 <rect x="420" y="1" width="380" height="418" rx="16" fill="#fff" stroke="#dbe2ea" stroke-width="1.5"/>
-<text x="610.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Each action is scored</text>
-<text x="610" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">how far one step moves the velocity toward its reference</text>
+<text x="610.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Is the principle followed?</text>
+<text x="610" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">a step toward the reference follows the principle</text>
 <rect x="436" y="96" width="168" height="140" rx="12" fill="#f7f8fa" stroke="#dbe2ea"/>
 <g transform="translate(478 142) rotate(0) scale(0.85)" opacity="1"><use href="#lander"/></g>
 <rect x="528" y="118" width="62" height="26" rx="13" fill="#fcf0dd" stroke="#a8640f" stroke-opacity="0.55"/>
@@ -300,7 +307,7 @@
 <circle cx="712" cy="358" r="5" fill="#8f9bab"/>
 <rect x="820" y="1" width="380" height="418" rx="16" fill="#f3f7fb" stroke="#cfdbe8" stroke-width="1.5"/>
 <text x="1010.0" y="40" font-size="18" fill="#1f2328" text-anchor="middle" font-weight="700">Update</text>
-<text x="1010" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">actions with a higher score become more likely</text>
+<text x="1010" y="74" font-size="12" fill="#59636e" text-anchor="middle" font-weight="400">actions that follow the principle become more likely</text>
 <polyline points="840,370 900,352 930,370 1030,370 1080,352 1180,366" fill="none" stroke="#1f2328" stroke-width="2"/>
 <line x1="930" y1="370" x2="930" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M930 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
 <line x1="1030" y1="370" x2="1030" y2="340" stroke="#1f2328" stroke-width="1.6"/><path d="M1030 340 l14 6 l-14 6 z" fill="#2f5d8a"/>
@@ -319,19 +326,19 @@
         <div class="flow steps">
           <div class="step"><span class="num">1</span><h4>Principle</h4><p>Stay upright, approach the pad, and do not descend too fast.</p></div>
           <div class="step"><span class="num">2</span><h4>Key quantity</h4><p>What the action changes directly in one step, here the velocities.</p></div>
-          <div class="step"><span class="num">3</span><h4>Reference</h4><p>The velocity to reach after this step, from the height, tilt and position.</p></div>
-          <div class="step"><span class="num">4</span><h4>Each step</h4><p>An action scores by how far it moves the velocity toward the reference.</p></div>
+          <div class="step"><span class="num">3</span><h4>Reference</h4><p>The velocity the principle asks for after this step, from the height, tilt and position.</p></div>
+          <div class="step"><span class="num">4</span><h4>Each step</h4><p>An action follows the principle when it moves the velocity toward the reference.</p></div>
         </div>
         <div class="eqs two">
           <div class="eq">
-            <h4>Score each action</h4>
+            <h4>Does the action follow the principle?</h4>
             <div class="math">\[ \delta(s,a)=\tfrac12\big\|\widetilde{\bm q}(s)-\bm q(s)\big\|^2-\tfrac12\big\|\widetilde{\bm q}(s)-\bm q(s')\big\|^2 \]</div>
-            <p>How much closer one step brings the key quantity to its reference.</p>
+            <p>Positive when the action brings the key quantity closer to the reference the principle sets.</p>
           </div>
           <div class="eq">
-            <h4>Make good actions more likely</h4>
+            <h4>Reinforce actions that follow the principle</h4>
             <div class="math">\[ \theta\leftarrow\theta+\eta\,\mathbb{E}\big[\delta(s,a)\,\nabla_\theta\log\pi_\theta(a\mid s)\big] \]</div>
-            <p>Actions with a higher score become more likely.</p>
+            <p>Actions that follow the principle more closely become more likely.</p>
           </div>
         </div>
         <p class="legend">\(\bm q\) key quantity, such as an angular velocity · \(\widetilde{\bm q}(s)\) the value it should reach after this step · \(s, s'\) the state before and after the action · <a href="https://arxiv.org/abs/2611.07130?ref=welcome.ai" target="_blank" rel="noopener">details in the paper ↗</a></p>

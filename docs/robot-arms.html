@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Arms</title>
+  <meta name="description" content="Robot arm tasks learned with prescriptive policy learning: the learned behavior, the principles taught, and the training code.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body id="top">
+  <div data-site-header></div>
+  <script src="assets/layout.js"></script>
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html#examples">Examples</a> / Robot arms</p>
+      <h1>Robot arms</h1>
+      <p class="intro">Robot arms move objects through contact, such as pushing a puck across a table or picking up a block. The agent moves the arm so that its hand meets the object in the right way and carries it to the goal.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <article class="task" id="fetch-move">
+        <div class="task-head">
+          <h2>Move the gripper to a target</h2>
+          <span class="tag">Fetch</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/robot_arms/fetch_move.gif" alt="Four episodes of the learned policy moving the Fetch gripper to a red target point" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantities</dt><dd>gripper velocity \(v\)</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a\lVert e\rVert},\,\lVert e\rVert/\tau,\,V\big)\): fast when far, slowing down on arrival</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Go to the target</td><td>always</td><td>\(v\to v^*(x_{\text{target}}-x')\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">Primes mark the next state with no action; \(x\) is the gripper position and \(x_{\text{target}}\) the target. Start and target are random points in the region where the block and goals lie; \(V\) is the speed limit, 0.4 m/s, \(a\) the planned deceleration, 4.5 m/s², and \(\tau=0.2\) s.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 10,400 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 100 evaluation episodes end within 5 cm of the target</dd>
+              <dt>After 40,000 steps</dt><dd>final distance 0.58 cm on average, 1.70 cm at most</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/robot_arms/fetch_move.py" data-download="fetch_move.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>fetch_move.py</a>
+            <a class="btn" href="examples/robot_arms/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python fetch_move.py</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="task" id="fetch-pick-and-place">
+        <div class="task-head">
+          <h2>Pick up the block and place it</h2>
+          <span class="tag">FetchPickAndPlace</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/robot_arms/fetch_pick_and_place.gif" alt="Three episodes: the gripper moves above the block, down to it, closes the fingers and carries the block to the red goal" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Skill reuse</h3>
+            <p class="note">The task reuses the skill of the card above, moving the gripper to a target, with no further training. The stages below were designed by Opus 5.5.</p>
+            <table>
+              <thead>
+                <tr><th>Stage</th><th>Target \(x_{\text{target}}\)</th><th>Fingers</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Move above the block</td><td>\(x_{\text{block}}+5\) cm</td><td>open</td></tr>
+                <tr><td>Move down to the block</td><td>\(x_{\text{block}}\)</td><td>open</td></tr>
+                <tr><td>Grasp</td><td>\(x_{\text{block}}\)</td><td>close</td></tr>
+                <tr><td>Carry to the goal</td><td>\(x_{\text{goal}}\)</td><td>closed</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(x_{\text{block}}\) is the block centre and \(x_{\text{goal}}\) the goal; a stage ends once the gripper is within 1.5 cm of its target and at rest.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Result</h3>
+            <p class="speed">200 of 200 blocks placed</p>
+            <dl class="defs train-stats">
+              <dt>Extra training</dt><dd>none</dd>
+              <dt>Placed</dt><dd>block within 5 cm of the goal</dd>
+              <dt>Distance to goal</dt><dd>0.71 cm (median), 2.30 cm at most</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/robot_arms/fetch_pick_and_place.py" data-download="fetch_pick_and_place.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>fetch_pick_and_place.py</a>
+            <a class="btn" href="examples/robot_arms/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python fetch_pick_and_place.py</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="task" id="pusher-push" hidden>
+        <div class="task-head">
+          <h2>Push the cylinder to the goal</h2>
+          <span class="tag">Pusher-v5</span>
+        </div>
+      </article>
+
+      <article class="task" id="fetch-slide" hidden>
+        <div class="task-head">
+          <h2>Slide the puck to the goal</h2>
+          <span class="tag">FetchSlide</span>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <div data-site-footer></div>
+  <script src="assets/layout.js" data-part="footer"></script>
+  <script src="assets/site.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '\\(', right: '\\)', display: false}]});"></script>
+</body>
+</html>

@@ -359,3 +359,5 @@ main { flex: 1 0 auto; }
 .task.wip h2 { margin: 0 0 8px; font-size: 1.4rem; }
 .task.wip p { margin: 0; color: var(--muted); }
 .task .player { display: flex; flex-direction: column; justify-content: center; }
+
+.player img { display: block; width: 100%; max-width: 420px; margin: 0 auto; border-radius: 6px; }
