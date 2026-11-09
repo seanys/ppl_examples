@@ -361,3 +361,59 @@ main { flex: 1 0 auto; }
 .task .player { display: flex; flex-direction: column; justify-content: center; }
 
 .player img { display: block; width: 100%; max-width: 420px; margin: 0 auto; border-radius: 6px; }
+
+/* card kinds: a skill (learned once, reused elsewhere) or a task. Every card has the same neutral frame; the header
+   carries the kind: an eyebrow label above the title, and for skills a light teal header. A task built by reusing
+   skills lists them under its title. */
+:root { --skill: #0f766e; --skill-ink: #0b4f4a; --skill-soft: #eef7f5; --skill-line: #cfe7e2; }
+.task { border-radius: 14px; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.04); }
+.task-head { align-items: flex-start; padding: 18px 24px; background: var(--bg); }
+.task-head .tag { margin-top: 2px; }
+.task-title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7480; }
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #aab2bc; }
+.task.is-skill .task-head { background: var(--skill-soft); border-bottom-color: var(--skill-line); }
+.task.is-skill .eyebrow { color: var(--skill); }
+.task.is-skill .eyebrow::before { background: var(--skill); }
+.task.is-skill .task-head h2 { color: var(--skill-ink); }
+.reuses { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 6px 0 0; font-size: 0.85rem; color: var(--muted); }
+.reuses a { display: inline-flex; align-items: center; gap: 6px; color: var(--skill-ink); background: var(--skill-soft); border: 1px solid var(--skill-line); border-radius: 999px; padding: 2px 10px; text-decoration: none; font-weight: 600; }
+.reuses a::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--skill); }
+.reuses a:hover { border-color: var(--skill); }
+@media (max-width: 480px) { .task-head { padding: 14px 16px; } }
+
+/* site palette (2026-11-10): calm indigo accent, light code blocks, teal reserved for skills */
+:root {
+  --text: #1d2430;
+  --muted: #5e6875;
+  --line: #e6e8ec;
+  --card: #f8f9fb;
+  --accent: #3a56a8;
+  --accent-soft: #eef1fb;
+  --accent-line: #cdd6f1;
+  --rod: #3a56a8;
+}
+.tag { color: var(--accent); background: var(--accent-soft); }
+.btn.primary { background: var(--accent); border-color: var(--accent); }
+.btn.primary:hover { background: #2f478d; border-color: #2f478d; }
+.terminal { background: var(--card); border: 1px solid var(--line); }
+.terminal pre { color: var(--text); }
+.terminal .prompt { color: #9aa3ae; }
+.terminal .copy { color: var(--muted); background: var(--bg); border: 1px solid var(--line); }
+.terminal .copy:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+.pr-list span { background: var(--accent-soft); }
+
+/* homepage sections: a kicker above each title, larger titles, and full-width tinted bands for the problem and the
+   method so the page reads as problem -> idea -> method */
+body { overflow-x: hidden; }
+.section { padding: 64px 0 24px; }
+.section > h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 10px; }
+.kicker { margin: 0 0 8px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.band { position: relative; margin-top: 48px; padding: 56px 0 48px; }
+.band::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw); }
+.band-problem::before { background: linear-gradient(180deg, #f2f4fb 0%, #f7f8fc 100%); border-top: 1px solid var(--accent-line); border-bottom: 1px solid var(--accent-line); }
+.band-problem .kicker { color: #b4532a; }
+.band-problem > h2 { color: #1d2430; }
+.band-method::before { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.band .flow { background: var(--bg); }
+.band > h2 { margin-bottom: 24px; }

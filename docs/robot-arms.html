@@ -25,9 +25,9 @@
 
   <main>
     <div class="wrap">
-      <article class="task" id="fetch-move">
+      <article class="task is-skill" id="fetch-move">
         <div class="task-head">
-          <h2>Move the gripper to a target</h2>
+          <div class="task-title"><span class="eyebrow">Skill</span><h2>Move the gripper to a target</h2></div>
           <span class="tag">Fetch</span>
         </div>
         <div class="split">
@@ -80,9 +80,65 @@
         </div>
       </article>
 
+      <article class="task is-skill" id="fetch-line">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Skill</span><h2>Move along a line at a set speed</h2></div>
+          <span class="tag">Fetch</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/robot_arms/fetch_line.gif" alt="Four episodes: the gripper moves along the grey line from the blue point A to the red point B, keeping pace with the green point" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantities</dt><dd>gripper velocity \(v\)</dd>
+              <dt>Pace point</dt><dd>\(p(t)=A+u\,v_{\text{target}}\,t\), moving from \(A\) along the line</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a\lVert e\rVert},\,\lVert e\rVert/\tau,\,V\big)\)</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Keep pace</td><td>always</td><td>\(v\to u\,v_{\text{target}}+v^*\big(p(t')-x'\big)\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(u\): direction from \(A\) to \(B\); \(v_{\text{target}}\): 0.1–0.4 m/s. <strong>Designed by Opus 5.5 from experience, without human intervention.</strong></p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 20,241 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>all 100 evaluation episodes stay within 2 cm of the line, with speed at \(B\) and average speed within 20% of \(v_{\text{target}}\)</dd>
+              <dt>Converges in</dt><dd>10 updates</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/robot_arms/fetch_line.py" data-download="fetch_line.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>fetch_line.py</a>
+            <a class="btn" href="examples/robot_arms/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python fetch_line.py</code></pre>
+          </div>
+        </div>
+      </article>
+
       <article class="task" id="fetch-pick-and-place">
         <div class="task-head">
-          <h2>Pick up the block and place it</h2>
+          <div class="task-title"><span class="eyebrow">Task</span><h2>Pick up the block and place it</h2><p class="reuses">Reuses <a href="#fetch-move">Move the gripper to a target</a> <strong>with no further training</strong></p></div>
           <span class="tag">FetchPickAndPlace</span>
         </div>
         <div class="split">
@@ -92,8 +148,8 @@
 
           <div class="rules">
             <section class="panel">
-            <h3>Skill reuse</h3>
-            <p class="note">The task reuses the skill of the card above, moving the gripper to a target, with no further training. The stages below were designed by Opus 5.5.</p>
+            <h3>Stages</h3>
+            <p class="note">The stages below were designed by Opus 5.5.</p>
             <table>
               <thead>
                 <tr><th>Stage</th><th>Target \(x_{\text{target}}\)</th><th>Fingers</th></tr>
@@ -138,14 +194,14 @@
 
       <article class="task" id="pusher-push" hidden>
         <div class="task-head">
-          <h2>Push the cylinder to the goal</h2>
+          <div class="task-title"><span class="eyebrow">Task</span><h2>Push the cylinder to the goal</h2></div>
           <span class="tag">Pusher-v5</span>
         </div>
       </article>
 
       <article class="task" id="fetch-slide" hidden>
         <div class="task-head">
-          <h2>Slide the puck to the goal</h2>
+          <div class="task-title"><span class="eyebrow">Task</span><h2>Slide the puck to the goal</h2></div>
           <span class="tag">FetchSlide</span>
         </div>
       </article>
