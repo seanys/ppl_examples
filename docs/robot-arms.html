@@ -40,7 +40,7 @@
             <h3>Principles</h3>
             <dl class="defs">
               <dt>Key quantities</dt><dd>gripper velocity \(v\)</dd>
-              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a\lVert e\rVert},\,\lVert e\rVert/\tau,\,V\big)\): fast when far, slowing down on arrival</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a_{\text{brake}}\lVert e\rVert},\,\lVert e\rVert/t_{\text{settle}},\,v_{\max}\big)\): fast when far, slowing down on arrival</dd>
             </dl>
             <table>
               <thead>
@@ -50,7 +50,7 @@
                 <tr><td>Go to the target</td><td>always</td><td>\(v\to v^*(x_{\text{target}}-x')\)</td></tr>
               </tbody>
             </table>
-            <p class="note">Primes mark the next state with no action; \(x\) is the gripper position and \(x_{\text{target}}\) the target. Start and target are random points in the region where the block and goals lie; \(V\) is the speed limit, 0.4 m/s, \(a\) the planned deceleration, 4.5 m/s², and \(\tau=0.2\) s.</p>
+            <p class="note">Primes mark the next state with no action; \(x\) is the gripper position and \(x_{\text{target}}\) the target. Start and target are random points in the region where the block and goals lie; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed.</p>
             </section>
 
             <section class="panel">
@@ -95,18 +95,18 @@
             <h3>Principles</h3>
             <dl class="defs">
               <dt>Key quantities</dt><dd>gripper velocity \(v\)</dd>
-              <dt>Pace point</dt><dd>\(p(t)=A+u\,v_{\text{target}}\,t\), moving from \(A\) along the line</dd>
-              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a\lVert e\rVert},\,\lVert e\rVert/\tau,\,V\big)\)</dd>
+              <dt>Pace point</dt><dd>\(p(t)=A+e_{AB}\,v_{\text{target}}\,t\), moving from \(A\) along the line</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e)=\frac{e}{\lVert e\rVert}\min\big(\sqrt{2a_{\text{brake}}\lVert e\rVert},\,\lVert e\rVert/t_{\text{settle}},\,v_{\max}\big)\)</dd>
             </dl>
             <table>
               <thead>
                 <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
               </thead>
               <tbody>
-                <tr><td>Keep pace</td><td>always</td><td>\(v\to u\,v_{\text{target}}+v^*\big(p(t')-x'\big)\)</td></tr>
+                <tr><td>Keep pace</td><td>always</td><td>\(v\to e_{AB}\,v_{\text{target}}+v^*\big(p(t')-x'\big)\)</td></tr>
               </tbody>
             </table>
-            <p class="note">\(u\): direction from \(A\) to \(B\); \(v_{\text{target}}\): 0.1–0.4 m/s. <strong>Designed by Opus 5.5 from experience, without human intervention.</strong></p>
+            <p class="note">\(e_{AB}\): unit direction from \(A\) to \(B\); \(v_{\text{target}}\): target speed; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed. <strong>Designed by Opus 5.5 from experience, without human intervention.</strong></p>
             </section>
 
             <section class="panel">
@@ -155,13 +155,13 @@
                 <tr><th>Stage</th><th>Target \(x_{\text{target}}\)</th><th>Fingers</th></tr>
               </thead>
               <tbody>
-                <tr><td>Move above the block</td><td>\(x_{\text{block}}+5\) cm</td><td>open</td></tr>
+                <tr><td>Move above the block</td><td>\(x_{\text{block}}+h_{\text{above}}\)</td><td>open</td></tr>
                 <tr><td>Move down to the block</td><td>\(x_{\text{block}}\)</td><td>open</td></tr>
                 <tr><td>Grasp</td><td>\(x_{\text{block}}\)</td><td>close</td></tr>
                 <tr><td>Carry to the goal</td><td>\(x_{\text{goal}}\)</td><td>closed</td></tr>
               </tbody>
             </table>
-            <p class="note">\(x_{\text{block}}\) is the block centre and \(x_{\text{goal}}\) the goal; a stage ends once the gripper is within 1.5 cm of its target and at rest.</p>
+            <p class="note">\(x_{\text{block}}\): block centre; \(x_{\text{goal}}\): goal; \(h_{\text{above}}\): height above the block; a stage ends once the gripper rests at its target.</p>
             </section>
 
             <section class="panel">
@@ -188,6 +188,118 @@
             <button type="button" class="copy" data-copy>Copy</button>
             <pre><code><span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> python fetch_pick_and_place.py</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="task" id="fetch-push-retry">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Task</span><h2>Push the block, retrying when it slides</h2><p class="reuses">Reuses <a href="#fetch-move">Move the gripper to a target</a> <a href="#fetch-line">Move along a line at a set speed</a> <strong>with no further training</strong></p></div>
+          <span class="tag">FetchPush</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/robot_arms/fetch_push_retry.gif" alt="Three episodes: the gripper pushes the block toward the goal and backs off to push again when the block slides away" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Stages</h3>
+            <p class="note">The block is pushed straight toward the goal; when it slides off the fingertips, the gripper backs off and pushes again.</p>
+            <table>
+              <thead>
+                <tr><th>Stage</th><th>Skill</th><th>Target</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Move behind the block</td><td>move</td><td>\(x_{\text{block}}-d_{\text{behind}}\,e_{\text{goal}}\), from above</td></tr>
+                <tr><td>Push</td><td>line</td><td>pace point \(x_{\text{block}}-d_{\text{contact}}\,e_{\text{goal}}\) at \(v_{\text{target}}\)</td></tr>
+                <tr><td>If the block slides</td><td>move</td><td>back to \(x_{\text{block}}-d_{\text{behind}}\,e_{\text{goal}}\), from above</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(e_{\text{goal}}\): unit direction from the block to the goal, renewed every step; \(d_{\text{behind}}\): distance behind the block where a push starts; \(d_{\text{contact}}\): distance from the gripper to the block centre while pushing; \(v_{\text{target}}\): target speed of the push.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Result</h3>
+            <p class="speed">200 of 200 blocks pushed</p>
+            <dl class="defs train-stats">
+              <dt>Extra training</dt><dd>none</dd>
+              <dt>Pushed</dt><dd>block within 5 cm of the goal</dd>
+              <dt>Distance to goal</dt><dd>0.35 cm (median)</dd>
+              <dt>Pushes</dt><dd>repeated whenever the block slides</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/robot_arms/fetch_push_retry.py" data-download="fetch_push_retry.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>fetch_push_retry.py</a>
+            <a class="btn" href="examples/robot_arms/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python fetch_push_retry.py</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <article class="task" id="fetch-push-axes">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Task</span><h2>Push the block flat along its faces</h2><p class="reuses">Reuses <a href="#fetch-move">Move the gripper to a target</a> <a href="#fetch-line">Move along a line at a set speed</a> <strong>with no further training</strong></p></div>
+          <span class="tag">FetchPush</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/robot_arms/fetch_push_axes.gif" alt="Three episodes: the gripper pushes the block along one table axis, then along the other, onto the goal" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Stages</h3>
+            <p class="note">The cube is pushed flat against a face, first along one table axis and then along the other.</p>
+            <table>
+              <thead>
+                <tr><th>Stage</th><th>Skill</th><th>Target</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Move behind the block</td><td>move</td><td>\(x_{\text{block}}-d_{\text{behind}}\,e_{\text{first}}\), from above</td></tr>
+                <tr><td>Push flat</td><td>line</td><td>pace point \(x_{\text{block}}-d_{\text{contact}}\,e_{\text{first}}\) at \(v_{\text{target}}\)</td></tr>
+                <tr><td>Turn to the other axis</td><td>move</td><td>\(x_{\text{block}}-d_{\text{behind}}\,e_{\text{second}}\), from above</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(e_{\text{first}}\), \(e_{\text{second}}\): the table axes toward the goal, the longer distance first; \(d_{\text{behind}}\): distance behind the block where a push starts; \(d_{\text{contact}}\): distance from the gripper to the block centre while pushing; \(v_{\text{target}}\): target speed of the push.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Result</h3>
+            <p class="speed">200 of 200 blocks pushed</p>
+            <dl class="defs train-stats">
+              <dt>Extra training</dt><dd>none</dd>
+              <dt>Pushed</dt><dd>block within 5 cm of the goal</dd>
+              <dt>Distance to goal</dt><dd>0.32 cm (median), 1.14 cm at most</dd>
+              <dt>Slides</dt><dd>none</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/robot_arms/fetch_push_axes.py" data-download="fetch_push_axes.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>fetch_push_axes.py</a>
+            <a class="btn" href="examples/robot_arms/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python fetch_push_axes.py</code></pre>
           </div>
         </div>
       </article>
