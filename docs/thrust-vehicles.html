@@ -237,6 +237,77 @@
           </div>
         </div>
       </article>
+
+      <article class="task" id="quadrotor-hover">
+        <div class="task-head">
+          <h2>Take off and hover</h2>
+          <span class="tag">HoverAviary</span>
+        </div>
+        <div class="split">
+          <div class="player" data-player data-run="quadrotor_hover" data-rules="#quad-rules">
+            <canvas aria-label="Animation of the learned quadrotor policy, seen from two sides"></canvas>
+            <p class="player-error" hidden>The trajectory data could not be loaded.</p>
+            <div class="controls">
+              <button type="button" data-play>Play</button>
+              <input type="range" min="0" max="1000" step="0.01" value="0" data-slider aria-label="Time">
+              <span class="clock" data-clock>0.00 s</span>
+              <select data-speed aria-label="Playback speed">
+                <option value="0.25">0.25×</option>
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
+            </div>
+            <div class="episodes" data-episodes aria-label="Episode"></div>
+          </div>
+
+          <div class="rules" id="quad-rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Key quantities</dt><dd>vertical velocity \(v_z\), angular velocities \(\omega_x,\omega_y\)</dd>
+              <dt>Approach speed</dt><dd>\(v^*(e,a)=\operatorname{sgn}(e)\min\big(\sqrt{2a|e|},\,|e|/\tau\big)\)</dd>
+              <dt>Target tilt</dt><dd>\(\tilde n=\sin\theta_l\operatorname{clip}\big((v^*(\rho',a_h)\,u-v_h)/v_c\big)\), the lean the remaining horizontal velocity still needs</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr data-rule="0"><td>Climb to the target</td><td>always</td><td>\(v_z\to v^*(z_{\text{target}}-z',\,a_z)\)</td></tr>
+                <tr data-rule="0"><td>Lean as needed</td><td>always</td><td>\((\omega_y,-\omega_x)\to\frac{\tilde n-n'}{|\tilde n-n'|}\sqrt{2a_\omega|\tilde n-n'|}\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">Primes mark the next state without action; \(n\) is the horizontal part of the thrust axis, \(\rho\) the horizontal distance to the target and \(u\) its direction.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 59,892 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>flies the full 8 s and stays within 0.1 m of the target for the last 2 s</dd>
+              <dt>Converges in</dt><dd>204 updates</dd>
+            </dl>
+            <p class="note">Claude Opus 5.5 (medium effort) designed these principles from the Lunar Lander experience, and they worked on the first attempt. A small network with two hidden layers of 64 units learns them within 27 s of training.</p>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/thrust_vehicles/quadrotor_hover.py" data-download="quadrotor_hover.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>quadrotor_hover.py</a>
+            <a class="btn" href="examples/thrust_vehicles/requirements_quadrotor.txt" data-download="requirements_quadrotor.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements_quadrotor.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements_quadrotor.txt
+<span class="prompt">$</span> python quadrotor_hover.py --seed 3</code></pre>
+          </div>
+        </div>
+      </article>
     </div>
   </main>
 
@@ -246,6 +317,7 @@
   <script src="data/thrust_vehicles/lunar_lander_stabilize.js"></script>
   <script src="data/thrust_vehicles/lunar_lander_land.js"></script>
   <script src="data/thrust_vehicles/lunar_lander_land_from_top.js"></script>
+  <script src="data/thrust_vehicles/quadrotor_hover.js"></script>
   <script src="assets/pendulum_player.js"></script>
   <script src="assets/site.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>

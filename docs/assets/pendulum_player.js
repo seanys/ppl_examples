@@ -1,5 +1,6 @@
-// Player for pendulum, acrobot (data.kind "acrobot": two links, the elbow driven), cart-pole and lander episodes (data.kind
-// "lander": positions, angle and fired engine in world coordinates): draws the system from recorded states and actions,
+// Player for pendulum, acrobot (data.kind "acrobot": two links, the elbow driven), cart-pole, lander episodes (data.kind
+// "lander": positions, angle and fired engine in world coordinates) and quadrotor episodes (data.kind "quadrotor":
+// position, roll and pitch): draws the system from recorded states and actions,
 // with play, pause, a time slider,
 // speed and episode choice. The active principle is marked in the principle table (rows with data-rule="0" or "1").
 (function () {
@@ -183,8 +184,47 @@
       rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
     }
 
+    function drawQuadrotor() {
+      // two side views of the quadrotor (x-z on the left, y-z on the right), each 0.9 m wide and 1.8 m high, with
+      // the ground, the target and the path flown; the body (enlarged) is drawn tilted by pitch (x-z) and roll (y-z)
+      const w = canvas.clientWidth, half = w / 2, span = 0.9, s = half / span;
+      const i = Math.min(Math.round(t), ep.z.length - 1);
+      const at = (arr) => { const [a, b, f] = sample(arr); return a + (b - a) * f; };
+      const z = at(ep.z), tz = data.target[2];
+      ctx.clearRect(0, 0, w, w);
+      [["x", ep.x, ep.pitch, 1, 0], ["y", ep.y, ep.roll, -1, half]].forEach(([name, h, ang, sg, ox]) => {
+        const X = (v) => ox + half / 2 + v * s, Y = (v) => w - 8 - v * s;
+        ctx.strokeStyle = css("--line"); ctx.lineWidth = 1;
+        if (ox > 0) { ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, w); ctx.stroke(); }
+        ctx.strokeStyle = css("--rod"); ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(ox + 6, Y(0)); ctx.lineTo(ox + half - 6, Y(0)); ctx.stroke();
+        ctx.strokeStyle = css("--torque"); ctx.lineWidth = 2;
+        const tx = X(0), ty = Y(tz), r = 6;
+        ctx.beginPath(); ctx.moveTo(tx - r, ty - r); ctx.lineTo(tx + r, ty + r); ctx.moveTo(tx + r, ty - r); ctx.lineTo(tx - r, ty + r); ctx.stroke();
+        ctx.strokeStyle = css("--rod"); ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(X(h[0]), Y(ep.z[0]));
+        for (let k = 1; k <= i; k++) ctx.lineTo(X(h[k]), Y(ep.z[k]));
+        ctx.stroke(); ctx.globalAlpha = 1;
+        const c = at(h), th = sg * at(ang), arm = 0.08;
+        ctx.save();
+        ctx.translate(X(c), Y(z)); ctx.rotate(th); ctx.scale(s, s);
+        ctx.strokeStyle = css("--rod"); ctx.lineWidth = 0.016; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(-arm, 0); ctx.lineTo(arm, 0); ctx.stroke();
+        ctx.lineWidth = 0.008;
+        [-arm, arm].forEach((e) => { ctx.beginPath(); ctx.moveTo(e - 0.03, -0.018); ctx.lineTo(e + 0.03, -0.018); ctx.stroke(); });
+        ctx.restore();
+        ctx.fillStyle = css("--muted"); ctx.font = "12px Inter, sans-serif";
+        ctx.fillText(name + "–z view", ox + 8, 18);
+      });
+      clock.textContent = (t * data.dt).toFixed(2) + " s";
+      slider.value = t;
+      const active = ep.rule[i];
+      rows.forEach((row) => row.classList.toggle("active", Number(row.dataset.rule) === active));
+    }
+
     function draw() {
       if (!ep) return;
+      if (data.kind === "quadrotor") return drawQuadrotor();
       if (data.kind === "acrobot") return drawAcrobot();
       if (data.kind === "cartpole") return drawCartpole();
       if (data.kind === "lander") return drawLander();
