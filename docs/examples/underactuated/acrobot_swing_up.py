@@ -265,7 +265,7 @@ def export(run, path):
     act = load(run)
     env = make_env()
     episodes = []
-    for k, seed in enumerate(EVAL_SEEDS[[1, 0, 2]]):
+    for k, seed in enumerate(EVAL_SEEDS[[0, 1, 2]]):
         o = env.reset(seed=int(seed))[0][None]
         th1, th2, u = [], [], []
         for _ in range(T_MAX):
