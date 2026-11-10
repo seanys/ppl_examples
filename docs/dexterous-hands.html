@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dexterous Hands</title>
+  <meta name="description" content="Dexterous hand tasks learned with prescriptive policy learning: the learned behavior, the principles taught, and the training code.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body id="top">
+  <div data-site-header></div>
+  <script src="assets/layout.js"></script>
+
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html#examples">Examples</a> / Dexterous hands</p>
+      <h1>Dexterous hands</h1>
+      <p class="intro">Dexterous hands handle objects with many jointed fingers, such as a five-fingered robot hand closing around a ball. The agent moves every finger joint so that the hand takes the shape a grasp needs.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <article class="task is-skill" id="adroit-fingers">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Skill</span><h2>Bring each finger to a target posture</h2></div>
+          <span class="tag">Adroit hand</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/dexterous_hands/adroit_fingers.gif" alt="The learned policy bringing the hand through named shapes: open claw, fist, point, pinch and back to an open hand" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <p class="lead-claim"><strong>Only the target posture is given; no model of the hand&rsquo;s joints is needed.</strong></p>
+            <dl class="defs">
+              <dt>Key quantities</dt><dd>angular velocity \(\omega_j\) of each finger joint</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Reach the target posture</td><td>always</td><td>\(\omega_j\to\operatorname{sgn}(\Delta_j)\min\big(\sqrt{2a_{\text{plan}}|\Delta_j|},\,|\Delta_j|/t_{\text{settle}}\big)\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(\Delta_j=\theta^*_j-\theta_j\), from the target angle of joint \(j\); a finger&rsquo;s target is its sideways angle, base bend and middle bend; \(a_{\text{plan}}\), \(t_{\text{settle}}\): planned braking and settling time.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Sample efficiency</h3>
+            <p class="speed">Within 40,000 environment steps</p>
+            <dl class="defs train-stats">
+              <dt>Success criterion</dt><dd>every joint within 0.1 rad of its target</dd>
+              <dt>Result</dt><dd>95 of 100 random target postures reached</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/dexterous_hands/adroit_fingers.py" data-download="adroit_fingers.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>adroit_fingers.py</a>
+            <a class="btn" href="examples/dexterous_hands/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> python adroit_fingers.py</code></pre>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <div data-site-footer></div>
+  <script src="assets/layout.js" data-part="footer"></script>
+  <script src="assets/site.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '\\(', right: '\\)', display: false}]});"></script>
+</body>
+</html>

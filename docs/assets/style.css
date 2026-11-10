@@ -37,6 +37,7 @@ a:hover { text-decoration: underline; }
 .section .sub { color: var(--muted); margin: 0 0 24px; }
 
 .examples { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.example[hidden] { display: none; }
 .example { display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; color: var(--text);
   transition: box-shadow 0.15s, transform 0.15s; }
 .example:hover { text-decoration: none; box-shadow: 0 6px 20px rgba(31, 35, 40, 0.08); transform: translateY(-2px); }
@@ -46,7 +47,7 @@ a:hover { text-decoration: underline; }
 .example h3 { font-size: 1.1rem; margin: 0 0 4px; }
 .example p { margin: 0; color: var(--muted); font-size: 0.93rem; }
 
-.coming { margin: 28px 0 56px; border: 1px dashed #c4ccd5; border-radius: 10px; padding: 20px 22px; background: var(--card); }
+.coming { margin: 28px 0 0; border: 1px dashed #c4ccd5; border-radius: 10px; padding: 20px 22px; background: var(--card); }
 .coming h3 { font-size: 1.05rem; margin: 0 0 6px; }
 .coming p { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -417,3 +418,16 @@ body { overflow-x: hidden; }
 .band-method::before { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .band .flow { background: var(--bg); }
 .band > h2 { margin-bottom: 24px; }
+.hopper .body { animation: hopper-hop 0.9s cubic-bezier(0.3, 0, 0.6, 1) infinite alternate; }
+.hopper .shadow { transform-origin: 164px 179px; animation: hopper-shadow 0.9s cubic-bezier(0.3, 0, 0.6, 1) infinite alternate; }
+@keyframes hopper-hop { from { transform: translateY(0); } to { transform: translateY(-26px); } }
+@keyframes hopper-shadow { from { transform: scale(1); opacity: 1; } to { transform: scale(0.7); opacity: 0.6; } }
+@media (prefers-reduced-motion: reduce) { .hopper .body, .hopper .shadow { animation: none; } }
+.hand .finger { transform-box: fill-box; transform-origin: 50% 100%; animation: hand-curl 2.4s ease-in-out infinite alternate; }
+.hand .finger.f2 { animation-delay: 0.15s; } .hand .finger.f3 { animation-delay: 0.3s; } .hand .finger.f4 { animation-delay: 0.45s; }
+.hand .thumbf { transform-box: fill-box; transform-origin: 100% 100%; animation: hand-thumb 2.4s ease-in-out infinite alternate; }
+@keyframes hand-curl { from { transform: scaleY(1); } to { transform: scaleY(0.55); } }
+@keyframes hand-thumb { from { transform: rotate(0deg); } to { transform: rotate(28deg); } }
+@media (prefers-reduced-motion: reduce) { .hand .finger, .hand .thumbf { animation: none; } }
+/* one highlighted claim at the top of a principles panel */
+.task .rules .lead-claim { margin: 0 0 14px; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 4px; color: var(--text); font-size: 0.98rem; }

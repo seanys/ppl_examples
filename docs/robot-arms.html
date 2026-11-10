@@ -50,7 +50,7 @@
                 <tr><td>Go to the target</td><td>always</td><td>\(v\to v^*(x_{\text{target}}-x')\)</td></tr>
               </tbody>
             </table>
-            <p class="note">Primes mark the next state with no action; \(x\) is the gripper position and \(x_{\text{target}}\) the target. Start and target are random points in the region where the block and goals lie; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed.</p>
+            <p class="note">Primes mark the next state with no action; \(x\) is the gripper position and \(x_{\text{target}}\) the target. Start and target are random points in the region where the block and goals lie; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed, set roughly from what the arm can do.</p>
             </section>
 
             <section class="panel">
@@ -106,7 +106,7 @@
                 <tr><td>Keep pace</td><td>always</td><td>\(v\to e_{AB}\,v_{\text{target}}+v^*\big(p(t')-x'\big)\)</td></tr>
               </tbody>
             </table>
-            <p class="note">\(e_{AB}\): unit direction from \(A\) to \(B\); \(v_{\text{target}}\): target speed; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed. <strong>Designed by Opus 5.5 from experience, without human intervention.</strong></p>
+            <p class="note">\(e_{AB}\): unit direction from \(A\) to \(B\); \(v_{\text{target}}\): target speed; \(a_{\text{brake}}\), \(t_{\text{settle}}\), \(v_{\max}\): planned braking, settling time and top speed, set roughly from what the arm can do. <strong>Designed by Opus 5.5 from experience, without human intervention.</strong></p>
             </section>
 
             <section class="panel">
