@@ -431,3 +431,29 @@ body { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) { .hand .finger, .hand .thumbf { animation: none; } }
 /* one highlighted claim at the top of a principles panel */
 .task .rules .lead-claim { margin: 0 0 14px; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 4px; color: var(--text); font-size: 0.98rem; }
+
+/* System identification card: a minimal probe of the device, two media columns side by side. */
+.task.is-probe .task-head { background: var(--accent-soft, #eef1fb); }
+.task.is-probe .eyebrow { color: var(--accent, #3a56a8); }
+.task.is-probe .eyebrow::before { background: var(--accent, #3a56a8); }
+.probe-lead { margin: 0; padding: 18px 22px 0; color: var(--text); }
+.probe-col { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+.probe-col h3 { margin: 0 0 12px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.probe-col img { display: block; width: 100%; max-width: 360px; margin: 0 auto 14px; border-radius: 6px; }
+.probe-col .defs { margin-bottom: 0; }
+.task[hidden] { display: none; }
+.probe-formula { margin: 0 22px 22px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; overflow-x: auto; }
+.probe-formula h3 { margin: 0 0 12px; font-size: 1.15rem; font-weight: 800; color: var(--accent, #3a56a8); }
+.probe-formula p { margin: 0; }
+.probe-formula .note { margin-top: 10px; }
+.algo-math { margin: 0 0 10px; padding: 10px 12px; background: var(--bg); border-radius: 6px; overflow-x: auto; }
+.algo-legend { margin: 0; padding: 0 22px 22px; }
+.algo-one { margin: 18px 22px 14px; display: grid; gap: 14px; }
+.algo-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px; align-items: center; }
+.algo-row .algo-math { margin: 0; }
+.algo-row p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+@media (max-width: 860px) { .algo-row { grid-template-columns: 1fr; gap: 8px; } }
+.algo-single { margin: 14px 22px 22px; text-align: center; font-size: 1.1rem; }
+.algo-where { margin: 0; padding: 0 22px 22px; color: var(--text); }
+.result-fig { display: block; width: 100%; max-width: 300px; margin: 0 auto 12px; }
+#adroit-grip .rules td { white-space: normal; }

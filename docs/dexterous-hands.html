@@ -25,7 +25,106 @@
 
   <main>
     <div class="wrap">
-      <article class="task is-skill" id="adroit-fingers">
+      <article class="task is-probe" id="deterministic-ppl">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Algorithm</span><h2>Deterministic PPL for fine control</h2></div>
+        </div>
+        <p class="probe-lead">Random exploration disturbs fine control, so Deterministic PPL follows the gradient of the principle coefficient:</p>
+        <div class="algo-math algo-single">\(\phi\leftarrow\phi+\alpha\,\nabla_\phi\Big[\tfrac12\big\|\widetilde{\boldsymbol q}(s)-\boldsymbol q(s)\big\|^2-\tfrac12\big\|\widetilde{\boldsymbol q}(s)-\hat{\boldsymbol q}\big(s,\pi_\phi(s)\big)\big\|^2\Big]\)</div>
+        <p class="algo-where">where \(\hat{\boldsymbol q}(s,a)\) is the predicted next-step key quantity (for example, fitted by a network). This gives the gradient directly, rather than estimating it from sampled actions, and thus supports continuous optimization.</p>
+      </article>
+
+      <article class="task is-probe" id="adroit-identification">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">System identification</span><h2>Mechanical characterization of the hand</h2></div>
+          <span class="tag">Adroit hand</span>
+        </div>
+        <p class="probe-lead">A quick, low-cost test of the hand shows how its joints and fingertips respond to commands, to support deterministic PPL (a rough estimate is enough). A new device needs only a brief test of this kind.</p>
+        <div class="split">
+          <section class="probe-col">
+            <h3>Joint motion</h3>
+            <img src="data/dexterous_hands/identify_joint.gif" alt="One joint of each finger jumping to new targets" loading="lazy">
+            <dl class="defs">
+              <dt>Goal</dt><dd>how the action affects the joint&rsquo;s angular velocity</dd>
+              <dt>Learned</dt><dd>\(\hat\omega'_j=f_j\big(\theta_j,\,\omega_j,\,\theta^{\text{cmd}}_j-\theta_j\big)\) (neural network)</dd>
+              <dt>Probe</dt><dd>a few seconds of moving each joint</dd>
+            </dl>
+            <p class="note">\(\theta_j\), \(\omega_j\): angle and angular velocity of joint \(j\); \(\theta^{\text{cmd}}_j\): its commanded angle; \(\hat\omega'_j\): predicted angular velocity one step later.</p>
+          </section>
+          <section class="probe-col">
+            <h3>Contact force</h3>
+            <img src="data/dexterous_hands/identify_force.gif" alt="A fixed thin rod against each fingertip in turn; the base joint's target rises and the fingertip presses harder" loading="lazy">
+            <dl class="defs">
+              <dt>Goal</dt><dd>how the action affects the force on a finger segment</dd>
+              <dt>Learned</dt><dd>\(\hat F_s=g_s\big(\boldsymbol\theta_s,\,\mathbf{x}_s,\,p_s\big)\) (neural network)</dd>
+              <dt>Probe</dt><dd>a few presses per posture on one finger (similar segments can share one network)</dd>
+            </dl>
+            <p class="note">\(\hat F_s\): predicted force on segment \(s\); \(\boldsymbol\theta_s\), \(\mathbf{x}_s\): angles of the joints pressing it and their increments; \(p_s\): contact position along the segment.</p>
+          </section>
+        </div>
+      </article>
+
+      <article class="task is-skill" id="adroit-grip">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Skill</span><h2>Grip</h2></div>
+          <span class="tag">Adroit hand</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/dexterous_hands/grip_lift.gif" alt="The hand grips a thin cylinder with all five fingers and lifts it off the table" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Goal</dt><dd>hold an upright object with all five fingers at the target force \(F_{\text{target}}\)</dd>
+              <dt>Key quantities</dt><dd>joint angular velocity \(\omega_j\); force \(F_s\) on a touching segment</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Close toward the grip posture</td><td>free</td><td>\(\omega_j\to\operatorname{sgn}(\Delta_j)\sqrt{2a_j|\Delta_j|}\)</td></tr>
+                <tr><td>Hold where it touched</td><td>touched</td><td>\(\theta^{\text{cmd}}_j=\theta^{\text{touch}}_j\)</td></tr>
+                <tr><td>Press to the target force</td><td>thumb and two fingers touch</td><td>\(F_s\to F_{\text{target}}\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(\Delta_j\): from the angle of joint \(j\) to the grip posture, set by the object&rsquo;s height and width; \(a_j\): planned braking; \(F_{\text{target}}\): 2&ndash;6 N, drawn per episode; learned with Deterministic PPL.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Result</h3>
+            <dl class="defs train-stats">
+              <dt>Training</dt><dd>36,000 environment steps, 90 grasps, 18 updates</dd>
+              <dt>Force</dt><dd>72% of finger forces within 1 N of the target</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+
+        <div class="run run-full">
+          <h3>Train it yourself</h3>
+          <div class="downloads">
+            <a class="btn primary" href="examples/dexterous_hands/adroit_grip/adroit_grip.py" data-download="adroit_grip.py">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>adroit_grip.py</a>
+            <a class="btn" href="examples/dexterous_hands/adroit_grip/models.zip" data-download="models.zip">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>models.zip</a>
+            <a class="btn" href="examples/dexterous_hands/adroit_grip/requirements.txt" data-download="requirements.txt">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>requirements.txt</a>
+          </div>
+          <div class="terminal">
+            <button type="button" class="copy" data-copy>Copy</button>
+            <pre><code><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> unzip models.zip
+<span class="prompt">$</span> python adroit_grip.py</code></pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- Hidden on request; kept for later use. -->
+      <article class="task is-skill" id="adroit-fingers" hidden>
         <div class="task-head">
           <div class="task-title"><span class="eyebrow">Skill</span><h2>Bring each finger to a target posture</h2></div>
           <span class="tag">Adroit hand</span>
