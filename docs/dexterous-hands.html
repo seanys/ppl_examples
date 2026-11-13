@@ -71,15 +71,15 @@
         </div>
         <div class="split">
           <div class="player">
-            <img src="data/dexterous_hands/pinch.gif" alt="The hand pinches objects on the table between the thumb and the index and middle fingertips" loading="lazy">
+            <img src="data/dexterous_hands/pinch.gif" alt="The hand pinches objects between the thumb and the middle fingertip and lifts them off the table" loading="lazy">
           </div>
 
           <div class="rules">
             <section class="panel">
             <h3>Principles</h3>
             <dl class="defs">
-              <dt>Goal</dt><dd>pinch an object between the thumb and the index and middle fingertips at \(F_{\text{target}}\)</dd>
-              <dt>Key quantities</dt><dd>joint angular velocity \(\omega_j\); fingertip force \(F_s\)</dd>
+              <dt>Goal</dt><dd>pinch an object between the thumb and the middle fingertip at \(F_{\text{target}}\), the index making up any force gap</dd>
+              <dt>Key quantities</dt><dd>joint angular velocity \(\omega_j\); segment force \(F_s\)</dd>
             </dl>
             <table>
               <thead>
@@ -88,17 +88,18 @@
               <tbody>
                 <tr><td>Close in</td><td>free</td><td>\(\omega_j\to\operatorname{sgn}(\Delta_j)\sqrt{2a_j|\Delta_j|}\)</td></tr>
                 <tr><td>Hold</td><td>touched</td><td>\(\theta^{\text{cmd}}_j=\theta^{\text{touch}}_j\)</td></tr>
-                <tr><td>Press</td><td>all three touch</td><td>\(F_s\to F_{\text{target}}\)</td></tr>
+                <tr><td>Press</td><td>middle and thumb touch</td><td>\(F_s\to F_{\text{target}}/n\)</td></tr>
+                <tr><td>Balance</td><td>\(F_{\text{th}}-F_{\text{mid}}>\Delta F_{\min}\)</td><td>index \(F_s\to(F_{\text{th}}-F_{\text{mid}})/n\)</td></tr>
               </tbody>
             </table>
-            <p class="note">\(\Delta_j\): angle left to the pinch posture (index and middle bent at the knuckle, thumb pad facing between them); \(a_j\): planned braking at the fingertip; <span style="white-space:nowrap">\(F_{\text{target}}\): 1&ndash;4 N</span>; learned with Deterministic PPL.</p>
+            <p class="note">\(\Delta_j\): angle left to the pinch posture (thumb first opposite the middle fingertip, then closing on it); \(a_j\): planned braking at the fingertip; <span style="white-space:nowrap">\(F_{\text{target}}\): 2&ndash;6 N</span>; \(n\): segments of the finger in contact; \(F_{\text{th}}, F_{\text{mid}}\): thumb and middle forces; \(\Delta F_{\min}\): smallest gap the index makes up; learned with Deterministic PPL.</p>
             </section>
 
             <section class="panel">
             <h3>Result</h3>
             <dl class="defs train-stats">
-              <dt>Training</dt><dd>40,000 environment steps, 100 pinches, 20 updates</dd>
-              <dt>Force</dt><dd>mean gap to the target: 0.7 N (index), 0.5 N (middle), 0.6 N (thumb)</dd>
+              <dt>Training</dt><dd>10,000 environment steps, 25 pinches, 5 updates</dd>
+              <dt>Lift</dt><dd>20 of 20 test objects pinched and lifted 10 cm, the object free on the table</dd>
             </dl>
             </section>
           </div>
