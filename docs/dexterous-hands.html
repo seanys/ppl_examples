@@ -64,6 +64,47 @@
         </div>
       </article>
 
+      <article class="task is-skill" id="adroit-pinch">
+        <div class="task-head">
+          <div class="task-title"><span class="eyebrow">Skill</span><h2>Pinch</h2></div>
+          <span class="tag">Adroit hand</span>
+        </div>
+        <div class="split">
+          <div class="player">
+            <img src="data/dexterous_hands/pinch_lift.gif" alt="The hand pinches objects on the table between the thumb and the index and middle fingertips and lifts them" loading="lazy">
+          </div>
+
+          <div class="rules">
+            <section class="panel">
+            <h3>Principles</h3>
+            <dl class="defs">
+              <dt>Goal</dt><dd>pinch an object between the thumb pad and the index and middle pads at the target force \(F_{\text{target}}\)</dd>
+              <dt>Key quantities</dt><dd>joint angular velocity \(\omega_j\); force \(F_s\) on a fingertip segment</dd>
+            </dl>
+            <table>
+              <thead>
+                <tr><th>Principle</th><th>When</th><th>Reference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Close toward the pinch posture</td><td>free</td><td>\(\omega_j\to\operatorname{sgn}(\Delta_j)\sqrt{2a_j|\Delta_j|}\)</td></tr>
+                <tr><td>Hold where it touched</td><td>touched</td><td>\(\theta^{\text{cmd}}_j=\theta^{\text{touch}}_j\)</td></tr>
+                <tr><td>Press to the target force</td><td>thumb and two fingers touch</td><td>\(F_s\to F_{\text{target}}\)</td></tr>
+              </tbody>
+            </table>
+            <p class="note">\(\Delta_j\): from the angle of joint \(j\) to the pinch posture, in which the index and middle fingers bend only at the knuckle and the thumb pad faces the spot between their pads, at the top of the object (balls and ellipsoids at the middle); \(a_j\): planned braking of the fingertip pad; only the knuckles and the thumb base press; \(F_{\text{target}}\): 1&ndash;4 N, drawn per episode; learned with Deterministic PPL.</p>
+            </section>
+
+            <section class="panel">
+            <h3>Result</h3>
+            <dl class="defs train-stats">
+              <dt>Training</dt><dd>100,000 environment steps, 250 pinches, 50 updates</dd>
+              <dt>Force</dt><dd>mean gap to the target 0.4 N on the index and middle fingers, 0.9 N on the thumb</dd>
+            </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
       <article class="task is-skill" id="adroit-grip">
         <div class="task-head">
           <div class="task-title"><span class="eyebrow">Skill</span><h2>Grip</h2></div>
